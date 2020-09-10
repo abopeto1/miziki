@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Sanjola</string>
+    <string name="roll_label">Roll</string>
+    <string name="image_label">image</string>
+    <string name="title_activity_app">MainActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 </resources>
