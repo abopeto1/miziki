@@ -18,5 +18,6 @@
         android:id="@+id/favoritesFragment"
         android:name="com.levagency.sanjola.controllers.fragments.FavoritesFragment"
         android:label="FavoritesFragment"
-        tools:layout="@layout/fragment_favorites"/>
+        tools:layout="@layout/fragment_favorites">
+    </fragment>
 </navigation>
