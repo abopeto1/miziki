@@ -14,29 +14,15 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         tools:context=".controllers.activities.MainActivity">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/music_label"
-            />
-        <fragment
-            android:id="@+id/musicFragment"
-            android:name="com.levagency.sanjola.controllers.fragments.MusicFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            />
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/bio_scroll"
-            >
 
-            <TextView
-                android:id="@+id/bio_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@={album.name}" />
-        </ScrollView>
+        <fragment
+            android:id="@+id/nav_host_fragment"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:navGraph="@navigation/navigation"
+            app:defaultNavHost="true"
+            />
 
     </LinearLayout>
 </layout>
