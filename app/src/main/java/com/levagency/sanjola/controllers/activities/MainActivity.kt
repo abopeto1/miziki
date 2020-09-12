@@ -8,6 +8,7 @@ import androidx.navigation.ui.NavigationUI
 import com.levagency.sanjola.R
 import com.levagency.sanjola.databinding.ActivityMainBinding
 import com.levagency.sanjola.models.Album
+import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -15,6 +16,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Timber.i("OnCreated Call")
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         binding.album = album

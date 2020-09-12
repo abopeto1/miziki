@@ -1,3 +1,11 @@
 package com.levagency.sanjola.models
 
-data class Album(var id: Long, var name: String)
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName="album")
+data class Album(
+    @PrimaryKey(autoGenerate = true)
+    var id: Long = 0L,
+    var name: String
+)
