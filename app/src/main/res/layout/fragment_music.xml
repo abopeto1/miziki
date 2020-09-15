@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
-
+    <data>
+        <variable
+            name="albumViewModel"
+            type="com.levagency.miziki.controllers.fragments.ui.AlbumViewModel"
+            />
+    </data>
     <LinearLayout
         android:id="@+id/btn"
         android:layout_width="match_parent"
@@ -16,6 +21,7 @@
             android:id="@+id/btn_next"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/next" />
+            android:text="@string/next"
+            />
     </LinearLayout>
 </layout>

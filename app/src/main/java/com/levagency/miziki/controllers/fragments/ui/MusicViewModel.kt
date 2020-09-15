@@ -1,8 +1,8 @@
-package com.levagency.sanjola.controllers.fragments.ui
+package com.levagency.miziki.controllers.fragments.ui
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.levagency.sanjola.models.Album
+import com.levagency.miziki.models.Album
 import timber.log.Timber
 
 class MusicViewModel : ViewModel() {

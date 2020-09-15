@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/musicFragment"
-        android:name="com.levagency.sanjola.controllers.fragments.MusicFragment"
+        android:name="com.levagency.miziki.controllers.fragments.MusicFragment"
         android:label="MusicFragment"
         tools:layout="@layout/fragment_music">
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/favoritesFragment"
-        android:name="com.levagency.sanjola.controllers.fragments.FavoritesFragment"
+        android:name="com.levagency.miziki.controllers.fragments.FavoritesFragment"
         android:label="FavoritesFragment"
         tools:layout="@layout/fragment_favorites">
     </fragment>

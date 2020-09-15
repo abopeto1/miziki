@@ -1,4 +1,4 @@
-package com.levagency.sanjola
+package com.levagency.miziki
 
 import org.junit.Test
 

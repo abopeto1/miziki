@@ -1,4 +1,4 @@
-package com.levagency.sanjola.models
+package com.levagency.miziki.models
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

@@ -1,9 +1,9 @@
-package com.levagency.sanjola
+package com.levagency.miziki
 
 import android.app.Application
 import timber.log.Timber
 
-class SanjolaApplication : Application() {
+class MizikiApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
