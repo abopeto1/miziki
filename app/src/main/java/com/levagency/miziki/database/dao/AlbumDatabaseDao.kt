@@ -19,8 +19,8 @@ interface AlbumDatabaseDao {
     suspend fun clear()
 
     @Query("SELECT * FROM album order by id DESC")
-    suspend fun getAllAlbums(): List<Album>
+    fun getAllAlbums(): LiveData<List<Album>>
 
     @Query("SELECT * FROM album ORDER BY id DESC LIMIT 1")
-    suspend fun getAlbum(): Album?
+    fun getAlbum(): LiveData<Album?>
 }

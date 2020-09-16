@@ -7,14 +7,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.levagency.miziki.R
+import com.levagency.miziki.adapters.AlbumAdapter
 import com.levagency.miziki.controllers.fragments.ui.AlbumViewModel
 import com.levagency.miziki.controllers.fragments.ui.MusicViewModel
 import com.levagency.miziki.database.database.MizikiDatabase
 import com.levagency.miziki.databinding.FragmentMusicBinding
+import com.levagency.miziki.models.Album
 import com.levagency.miziki.models.factories.AlbumViewModelFactory
-import timber.log.Timber
+import com.levagency.miziki.repositories.AlbumDataRepository
 
 class MusicFragment : Fragment() {
     private lateinit var viewModel: MusicViewModel
@@ -30,19 +32,37 @@ class MusicFragment : Fragment() {
 
         // Create an instance of the ViewModel Factory
         val dataSource = MizikiDatabase.getInstance(application).albumDatabaseDao
-        val viewModelFactory = AlbumViewModelFactory(dataSource, application)
+        val albumDataRepository = AlbumDataRepository(dataSource)
+        val viewModelFactory = AlbumViewModelFactory(albumDataRepository)
 
         // Get a reference to the ViewModel associated with this fragment
         val albumViewModel = ViewModelProvider(this, viewModelFactory).get(AlbumViewModel::class.java)
 
-        Timber.i("Called ViewModelProvider.get")
         viewModel = ViewModelProvider(this).get(MusicViewModel::class.java)
-        binding.btnNext.setOnClickListener { view: View ->
-            view.findNavController().navigate(R.id.action_musicFragment_to_favoritesFragment)
-        }
+
         binding.lifecycleOwner = this
         binding.albumViewModel = albumViewModel
 
+        val albumAdapter = AlbumAdapter()
+
+        binding.albumHorizontalList.apply {
+            adapter = albumAdapter
+            layoutManager = LinearLayoutManager(activity)
+        }
+
+        albumViewModel.albums.observe(viewLifecycleOwner, {
+            it?.let {
+                albumAdapter.data = it
+            }
+        })
+        loadOneAlbum(albumAdapter)
         return binding.root
+    }
+
+    private fun loadOneAlbum(adapter: AlbumAdapter){
+        val d = ArrayList<Album>()
+
+        d.add(Album(89, name = "Mer"))
+        adapter.data = d
     }
 }
