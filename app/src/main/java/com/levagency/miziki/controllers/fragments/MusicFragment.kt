@@ -7,11 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.levagency.miziki.R
 import com.levagency.miziki.album.adapter.AlbumAdapter
-import com.levagency.miziki.controllers.fragments.ui.AlbumViewModel
+import com.levagency.miziki.album.viewmodel.AlbumViewModel
 import com.levagency.miziki.controllers.fragments.ui.MusicViewModel
 import com.levagency.miziki.database.database.MizikiDatabase
 import com.levagency.miziki.databinding.FragmentMusicBinding
@@ -44,7 +46,19 @@ class MusicFragment : Fragment() {
         binding.lifecycleOwner = this
         binding.albumViewModel = albumViewModel
 
-        val albumAdapter = AlbumAdapter(AlbumListener { albumId -> Toast.makeText(context, "$albumId", Toast.LENGTH_LONG).show() })
+        val albumAdapter = AlbumAdapter(AlbumListener { albumId ->
+            Toast.makeText(context, "$albumId", Toast.LENGTH_LONG).show()
+            albumViewModel.onAlbumTileClicked(albumId)
+        })
+
+        albumViewModel.navigateToAlbumDetail.observe(viewLifecycleOwner, {albumId ->
+            albumId?.let {
+                this.findNavController().navigate(
+                    MusicFragmentDirections.actionMusicFragmentToFavoritesFragment()
+                )
+                albumViewModel.onAlbumTileNavigated()
+            }
+        })
         val manager = GridLayoutManager(activity, 3, GridLayoutManager.HORIZONTAL, false)
         binding.albumHorizontalList.apply {
             adapter = albumAdapter

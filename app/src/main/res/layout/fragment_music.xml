@@ -4,7 +4,7 @@
     <data>
         <variable
             name="albumViewModel"
-            type="com.levagency.miziki.controllers.fragments.ui.AlbumViewModel"
+            type="com.levagency.miziki.album.viewmodel.AlbumViewModel"
             />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout

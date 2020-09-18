@@ -2,7 +2,7 @@ package com.levagency.miziki.album.factory
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.levagency.miziki.controllers.fragments.ui.AlbumViewModel
+import com.levagency.miziki.album.viewmodel.AlbumViewModel
 import com.levagency.miziki.album.repository.AlbumDataRepository
 import java.lang.IllegalArgumentException
 

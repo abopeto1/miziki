@@ -1,4 +1,4 @@
-package com.levagency.miziki.controllers.fragments.ui
+package com.levagency.miziki.album.viewmodel
 
 import androidx.lifecycle.*
 import com.levagency.miziki.album.entity.Album
@@ -8,6 +8,12 @@ import kotlinx.coroutines.launch
 class AlbumViewModel(
     albumDataRepository: AlbumDataRepository,
 ) : ViewModel() {
+    private val _navigateToAlbumDetail = MutableLiveData<Long>()
+
+    val navigateToAlbumDetail
+        get() = _navigateToAlbumDetail
+
+
     private lateinit var album: LiveData<Album?>
 
     var albums = albumDataRepository.getAllAlbum()
@@ -20,5 +26,13 @@ class AlbumViewModel(
         viewModelScope.launch {
             return@launch
         }
+    }
+
+    fun onAlbumTileClicked(albumId: Long){
+        _navigateToAlbumDetail.value = albumId
+    }
+
+    fun onAlbumTileNavigated() {
+        _navigateToAlbumDetail.value = null
     }
 }
