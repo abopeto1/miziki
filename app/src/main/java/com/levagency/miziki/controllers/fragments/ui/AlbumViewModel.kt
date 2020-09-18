@@ -1,8 +1,8 @@
 package com.levagency.miziki.controllers.fragments.ui
 
 import androidx.lifecycle.*
-import com.levagency.miziki.models.Album
-import com.levagency.miziki.repositories.AlbumDataRepository
+import com.levagency.miziki.album.entity.Album
+import com.levagency.miziki.album.repository.AlbumDataRepository
 import kotlinx.coroutines.launch
 
 class AlbumViewModel(

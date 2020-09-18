@@ -5,7 +5,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.levagency.miziki.models.Album
+import com.levagency.miziki.album.entity.Album
 
 @Dao
 interface AlbumDatabaseDao {

@@ -1,8 +1,8 @@
-package com.levagency.miziki.repositories
+package com.levagency.miziki.album.repository
 
 import androidx.lifecycle.LiveData
 import com.levagency.miziki.database.dao.AlbumDatabaseDao
-import com.levagency.miziki.models.Album
+import com.levagency.miziki.album.entity.Album
 
 class AlbumDataRepository(
     private val albumDatabaseDao: AlbumDatabaseDao,

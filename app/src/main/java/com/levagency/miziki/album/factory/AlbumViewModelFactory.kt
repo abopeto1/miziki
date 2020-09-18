@@ -1,11 +1,9 @@
-package com.levagency.miziki.models.factories
+package com.levagency.miziki.album.factory
 
-import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.levagency.miziki.controllers.fragments.ui.AlbumViewModel
-import com.levagency.miziki.database.dao.AlbumDatabaseDao
-import com.levagency.miziki.repositories.AlbumDataRepository
+import com.levagency.miziki.album.repository.AlbumDataRepository
 import java.lang.IllegalArgumentException
 
 class AlbumViewModelFactory(

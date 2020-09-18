@@ -5,18 +5,19 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import com.levagency.miziki.R
-import com.levagency.miziki.adapters.AlbumAdapter
+import com.levagency.miziki.album.adapter.AlbumAdapter
 import com.levagency.miziki.controllers.fragments.ui.AlbumViewModel
 import com.levagency.miziki.controllers.fragments.ui.MusicViewModel
 import com.levagency.miziki.database.database.MizikiDatabase
 import com.levagency.miziki.databinding.FragmentMusicBinding
-import com.levagency.miziki.models.Album
-import com.levagency.miziki.models.factories.AlbumViewModelFactory
-import com.levagency.miziki.repositories.AlbumDataRepository
+import com.levagency.miziki.album.factory.AlbumViewModelFactory
+import com.levagency.miziki.album.listener.AlbumListener
+import com.levagency.miziki.album.repository.AlbumDataRepository
 
 class MusicFragment : Fragment() {
     private lateinit var viewModel: MusicViewModel
@@ -43,26 +44,19 @@ class MusicFragment : Fragment() {
         binding.lifecycleOwner = this
         binding.albumViewModel = albumViewModel
 
-        val albumAdapter = AlbumAdapter()
-
+        val albumAdapter = AlbumAdapter(AlbumListener { albumId -> Toast.makeText(context, "$albumId", Toast.LENGTH_LONG).show() })
+        val manager = GridLayoutManager(activity, 3, GridLayoutManager.HORIZONTAL, false)
         binding.albumHorizontalList.apply {
             adapter = albumAdapter
-            layoutManager = LinearLayoutManager(activity)
+            layoutManager = manager
         }
 
         albumViewModel.albums.observe(viewLifecycleOwner, {
             it?.let {
-                albumAdapter.data = it
+                albumAdapter.submitList(it)
             }
         })
-        loadOneAlbum(albumAdapter)
+
         return binding.root
-    }
-
-    private fun loadOneAlbum(adapter: AlbumAdapter){
-        val d = ArrayList<Album>()
-
-        d.add(Album(89, name = "Mer"))
-        adapter.data = d
     }
 }

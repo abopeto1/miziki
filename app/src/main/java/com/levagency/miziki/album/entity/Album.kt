@@ -1,4 +1,4 @@
-package com.levagency.miziki.models
+package com.levagency.miziki.album.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
