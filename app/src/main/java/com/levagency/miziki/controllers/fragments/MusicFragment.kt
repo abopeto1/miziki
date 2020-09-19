@@ -7,10 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.levagency.miziki.R
 import com.levagency.miziki.album.adapter.AlbumAdapter
 import com.levagency.miziki.album.viewmodel.AlbumViewModel
@@ -59,7 +58,7 @@ class MusicFragment : Fragment() {
                 albumViewModel.onAlbumTileNavigated()
             }
         })
-        val manager = GridLayoutManager(activity, 3, GridLayoutManager.HORIZONTAL, false)
+        val manager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
         binding.albumHorizontalList.apply {
             adapter = albumAdapter
             layoutManager = manager
@@ -67,7 +66,7 @@ class MusicFragment : Fragment() {
 
         albumViewModel.albums.observe(viewLifecycleOwner, {
             it?.let {
-                albumAdapter.submitList(it)
+                albumAdapter.addHeaderAndSubmitList(it)
             }
         })
 
