@@ -1,7 +1,6 @@
 package com.levagency.miziki.album.viewmodel
 
 import androidx.lifecycle.*
-import com.levagency.miziki.album.entity.Album
 import com.levagency.miziki.album.repository.AlbumDataRepository
 import kotlinx.coroutines.launch
 
@@ -14,7 +13,7 @@ class AlbumViewModel(
         get() = _navigateToAlbumDetail
 
 
-    private lateinit var album: LiveData<Album?>
+//    private lateinit var album: LiveData<Album?>
 
     var albums = albumDataRepository.getAllAlbum()
 

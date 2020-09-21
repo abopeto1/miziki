@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/musicFragment"
-        android:name="com.levagency.miziki.controllers.fragments.MusicFragment"
+        android:name="com.levagency.miziki.controllers.fragments.HomeFragment"
         android:label="MusicFragment"
-        tools:layout="@layout/fragment_music">
+        tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_musicFragment_to_favoritesFragment"
             app:destination="@id/favoritesFragment" />
