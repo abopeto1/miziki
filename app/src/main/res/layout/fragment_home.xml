@@ -3,6 +3,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
         <variable
+            name="homeViewModel"
+            type="com.levagency.miziki.controllers.fragments.ui.HomeViewModel" />
+        <variable
             name="albumViewModel"
             type="com.levagency.miziki.album.viewmodel.AlbumViewModel"
             />

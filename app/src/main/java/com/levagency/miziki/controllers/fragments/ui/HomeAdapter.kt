@@ -1,31 +1,34 @@
 package com.levagency.miziki.controllers.fragments.ui
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.levagency.miziki.databinding.HomeListItemBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-//class HomeDiffCallback : DiffUtil.ItemCallback<HomeCategory>(){
-//    override fun areItemsTheSame(oldItem: HomeCategory, newItem: HomeCategory): Boolean {
-//        return oldItem.title == newItem.title
-//    }
-//
-//    @SuppressLint("DiffUtilEquals")
-//    override fun areContentsTheSame(oldItem: HomeCategory, newItem: HomeCategory): Boolean {
-//        return oldItem == newItem
-//    }
-//}
+class HomeDiffCallback : DiffUtil.ItemCallback<HomeCategory>(){
+    override fun areItemsTheSame(oldItem: HomeCategory, newItem: HomeCategory): Boolean {
+        return oldItem.title == newItem.title
+    }
 
-//class HomeItem(val id: Long, val name: String)
+    @SuppressLint("DiffUtilEquals")
+    override fun areContentsTheSame(oldItem: HomeCategory, newItem: HomeCategory): Boolean {
+        return oldItem == newItem
+    }
+}
+
 class HomeCategory(val title: String, val adapter: RecyclerView.Adapter<RecyclerView.ViewHolder>?)
 
-class HomeAdapter(
-    private val data: ArrayList<HomeCategory>
-) : RecyclerView.Adapter<HomeAdapter.ViewHolder>() {
+class HomeAdapter : ListAdapter<HomeCategory, RecyclerView.ViewHolder>(HomeDiffCallback()) {
+    private val adapterScope = CoroutineScope(Dispatchers.Default)
+
     class ViewHolder(private val binding: HomeListItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: HomeCategory) {
             binding.homeCategory = item
@@ -53,13 +56,21 @@ class HomeAdapter(
         return ViewHolder.from(parent)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = data[position]
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when(holder){
+            is ViewHolder -> {
+                val item = getItem(position)
 
-        holder.bind(item)
+                holder.bind(item)
+            }
+        }
     }
 
-    override fun getItemCount(): Int {
-        return data.size
+    fun addCategories(list: List<HomeCategory>){
+        adapterScope.launch {
+            withContext(Dispatchers.Main){
+                submitList(list)
+            }
+        }
     }
 }
