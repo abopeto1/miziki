@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
@@ -38,8 +39,6 @@ class HomeFragment : Fragment() {
         // Initialize Recent Played
         initRecentPlayed(application, binding)
 
-//        viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
-
         return binding.root
     }
 
@@ -55,11 +54,11 @@ class HomeFragment : Fragment() {
             adapter = homeAdapter
         }
 
-        homeViewModel.categories.observe(viewLifecycleOwner){
+        homeViewModel.categories.observe(viewLifecycleOwner, Observer {
             it.let {
                 homeAdapter.addCategories(it)
             }
-        }
+        })
     }
 
     private fun initRecentPlayed(application: Application, binding: FragmentHomeBinding){
@@ -81,19 +80,19 @@ class HomeFragment : Fragment() {
 
         binding.homeViewModel?.categories?.value?.set(RECENT_PLAYED, HomeCategory("Recent Played", albumAdapter))
 
-        albumViewModel.navigateToAlbumDetail.observe(viewLifecycleOwner) { albumId ->
+        albumViewModel.navigateToAlbumDetail.observe(viewLifecycleOwner, Observer { albumId ->
             albumId?.let {
                 this.findNavController().navigate(
                     HomeFragmentDirections.actionMusicFragmentToFavoritesFragment()
                 )
                 albumViewModel.onAlbumTileNavigated()
             }
-        }
+        })
 
-        albumViewModel.albums.observe(viewLifecycleOwner) {
+        albumViewModel.albums.observe(viewLifecycleOwner, Observer {
             it.let {
                 albumAdapter.addHeaderAndSubmitList(it)
             }
-        }
+        })
     }
 }
