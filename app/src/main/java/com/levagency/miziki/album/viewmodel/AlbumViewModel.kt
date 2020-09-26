@@ -1,9 +1,9 @@
 package com.levagency.miziki.album.viewmodel
 
 import androidx.lifecycle.*
+import com.levagency.miziki.album.entity.Album
 import com.levagency.miziki.album.repository.AlbumDataRepository
 import com.levagency.miziki.network.MizikiApi
-import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -45,15 +45,15 @@ class AlbumViewModel(
 
     private fun getAlbums(){
         MizikiApi.retrofitService.getAlbums().enqueue(
-            object: Callback<String>{
-                override fun onFailure(call: Call<String>, t: Throwable) {
+            object: Callback<List<Album>>{
+                override fun onFailure(call: Call<List<Album>>, t: Throwable) {
                     _response.value = "Failure: "+ t.message
                     Timber.i(t.message)
                 }
 
-                override fun onResponse(call: Call<String>, response: Response<String>) {
-                    _response.value = response.body()
-                    Timber.i(response.body())
+                override fun onResponse(call: Call<List<Album>>, response: Response<List<Album>>) {
+                    _response.value = "${response.body()?.size} Albums Found"
+                    Timber.i(_response.value)
                 }
 
             }
