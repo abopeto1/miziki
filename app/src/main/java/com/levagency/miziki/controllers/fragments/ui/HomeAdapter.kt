@@ -24,7 +24,7 @@ class HomeDiffCallback : DiffUtil.ItemCallback<HomeCategory>(){
     }
 }
 
-class HomeCategory(val title: String, val adapter: RecyclerView.Adapter<RecyclerView.ViewHolder>?)
+class HomeCategory(val title: String, var adapter: RecyclerView.Adapter<RecyclerView.ViewHolder>? = null)
 
 class HomeAdapter : ListAdapter<HomeCategory, RecyclerView.ViewHolder>(HomeDiffCallback()) {
     private val adapterScope = CoroutineScope(Dispatchers.Default)
@@ -38,8 +38,10 @@ class HomeAdapter : ListAdapter<HomeCategory, RecyclerView.ViewHolder>(HomeDiffC
             binding.homeItemList.apply {
                 setHasFixedSize(true)
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                adapter = item.adapter
             }
-            binding.homeItemList.adapter = item.adapter
+//            binding.homeItemList.adapter = item.adapter
+            binding.executePendingBindings()
         }
 
         companion object {

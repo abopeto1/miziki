@@ -1,6 +1,5 @@
 package com.levagency.miziki.controllers.fragments
 
-import android.app.Application
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,34 +9,36 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.levagency.miziki.R
 import com.levagency.miziki.album.adapter.AlbumAdapter
 import com.levagency.miziki.album.viewmodel.AlbumViewModel
-import com.levagency.miziki.database.database.MizikiDatabase
 import com.levagency.miziki.album.factory.AlbumViewModelFactory
 import com.levagency.miziki.album.listener.AlbumListener
-import com.levagency.miziki.album.repository.AlbumDataRepository
 import com.levagency.miziki.controllers.fragments.ui.*
 import com.levagency.miziki.databinding.FragmentHomeBinding
+import timber.log.Timber
 
 class HomeFragment : Fragment() {
+    private lateinit var homeViewModel: HomeViewModel
+    lateinit var binding: FragmentHomeBinding
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val binding = DataBindingUtil.inflate<FragmentHomeBinding>(inflater, R.layout.fragment_home, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
+        binding.lifecycleOwner = this
         // Get Application
-        val application = requireNotNull(this.activity).application
+//        val application = requireNotNull(this.activity).application
 
         // Initialize Categories
         initHomeCategories(binding)
 
         // Initialize Recent Played
-        initRecentPlayed(application, binding)
+        initRecentPlayed(binding)
 
         return binding.root
     }
@@ -46,31 +47,28 @@ class HomeFragment : Fragment() {
         val homeAdapter = HomeAdapter()
         val viewModelProvider = HomeViewModelFactory()
 
-        val homeViewModel = ViewModelProvider(this, viewModelProvider).get(HomeViewModel::class.java)
+        homeViewModel = ViewModelProvider(this, viewModelProvider).get(HomeViewModel::class.java)
         binding.homeViewModel = homeViewModel
 
         binding.homeList.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             adapter = homeAdapter
         }
-
-        homeViewModel.categories.observe(viewLifecycleOwner, Observer {
-            it.let {
-                homeAdapter.addCategories(it)
-            }
+        homeViewModel.categories.value?.let { homeAdapter.addCategories(it) }
+        homeViewModel.categories.observe(viewLifecycleOwner, { list ->
+            homeAdapter.addCategories(list)
         })
     }
 
-    private fun initRecentPlayed(application: Application, binding: FragmentHomeBinding){
+    private fun initRecentPlayed(binding: FragmentHomeBinding){
         // Create an instance of the ViewModel Factory
-        val dataSource = MizikiDatabase.getInstance(application).albumDatabaseDao
-        val albumDataRepository = AlbumDataRepository(dataSource)
-        val viewModelFactory = AlbumViewModelFactory(albumDataRepository)
+//        val dataSource = MizikiDatabase.getInstance(application).albumDatabaseDao
+//        val albumDataRepository = AlbumDataRepository(dataSource)
+        val viewModelFactory = AlbumViewModelFactory()
 
         // Get a reference to the ViewModel associated with this fragment
         val albumViewModel = ViewModelProvider(this, viewModelFactory).get(AlbumViewModel::class.java)
 
-        binding.lifecycleOwner = this
         binding.albumViewModel = albumViewModel
 
         val albumAdapter = AlbumAdapter(AlbumListener { albumId ->
@@ -78,9 +76,9 @@ class HomeFragment : Fragment() {
             albumViewModel.onAlbumTileClicked(albumId)
         })
 
-        binding.homeViewModel?.categories?.value?.set(RECENT_PLAYED, HomeCategory("Recent Played", albumAdapter))
+        homeViewModel.recentlyPlayed.value = albumAdapter
 
-        albumViewModel.navigateToAlbumDetail.observe(viewLifecycleOwner, Observer { albumId ->
+        albumViewModel.navigateToAlbumDetail.observe(viewLifecycleOwner, { albumId ->
             albumId?.let {
                 this.findNavController().navigate(
                     HomeFragmentDirections.actionMusicFragmentToFavoritesFragment()
@@ -89,10 +87,34 @@ class HomeFragment : Fragment() {
             }
         })
 
-        albumViewModel.albums.observe(viewLifecycleOwner, Observer {
+        albumViewModel.albums.observe(viewLifecycleOwner, {
             it.let {
                 albumAdapter.addHeaderAndSubmitList(it)
+                binding.executePendingBindings()
             }
         })
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        homeViewModel.categories.observe(viewLifecycleOwner, {
+            it.let {
+                Timber.i(it.toString())
+                val homeAdapter = binding.homeList.adapter as HomeAdapter
+                homeAdapter.addCategories(it)
+            }
+        })
+
+        homeViewModel.recentlyPlayed.observe(viewLifecycleOwner, {
+            it.let {
+                binding.homeViewModel?.categories?.value?.get(RECENT_PLAYED)?.adapter = it
+            }
+        })
+
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        Timber.i("Home Fragment Destroyed")
     }
 }

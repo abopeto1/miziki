@@ -2,16 +2,11 @@ package com.levagency.miziki.album.viewmodel
 
 import androidx.lifecycle.*
 import com.levagency.miziki.album.entity.Album
-import com.levagency.miziki.album.repository.AlbumDataRepository
 import com.levagency.miziki.network.MizikiApi
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class AlbumViewModel(
-    albumDataRepository: AlbumDataRepository,
-) : ViewModel() {
+class AlbumViewModel : ViewModel() {
     private val _navigateToAlbumDetail = MutableLiveData<Long>()
 
     val navigateToAlbumDetail
@@ -20,12 +15,12 @@ class AlbumViewModel(
     // the external immutable LiveData for the response String
     private val _response = MutableLiveData<String>()
 
-    val response: LiveData<String>
-        get() = _response
+    private val _albums = MutableLiveData<List<Album>>()
+    val albums: LiveData<List<Album>>
+        get() = _albums
 
 //    private lateinit var album: LiveData<Album?>
-
-    var albums = albumDataRepository.getAllAlbum()
+//    var albums = albumDataRepository.getAllAlbum()
 
     init {
         initializeAlbums()
@@ -44,19 +39,15 @@ class AlbumViewModel(
     }
 
     private fun getAlbums(){
-        MizikiApi.retrofitService.getAlbums().enqueue(
-            object: Callback<List<Album>>{
-                override fun onFailure(call: Call<List<Album>>, t: Throwable) {
-                    _response.value = "Failure: "+ t.message
-                    Timber.i(t.message)
-                }
-
-                override fun onResponse(call: Call<List<Album>>, response: Response<List<Album>>) {
-                    _response.value = "${response.body()?.size} Albums Found"
-                    Timber.i(_response.value)
-                }
-
+        viewModelScope.launch {
+            try {
+                val list = MizikiApi.retrofitService.getAlbums()
+                _albums.value = list
+                _response.value = "${list.size} Albums Found"
+            } catch (e: Exception) {
+                Timber.i(e)
+                _response.value = "Failure : ${e.message}"
             }
-        )
+        }
     }
 }

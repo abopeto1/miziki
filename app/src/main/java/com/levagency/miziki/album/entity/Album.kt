@@ -10,5 +10,7 @@ data class Album(
     @Json(name = "id")
     var id: Long = 0L,
     @Json(name="name")
-    var name: String
+    var name: String,
+    @Json(name="image")
+    var image: String
 )

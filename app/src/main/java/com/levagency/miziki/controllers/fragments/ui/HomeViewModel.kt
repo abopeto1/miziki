@@ -2,30 +2,27 @@ package com.levagency.miziki.controllers.fragments.ui
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.launch
-import timber.log.Timber
+import androidx.recyclerview.widget.RecyclerView
+import com.levagency.miziki.album.adapter.AlbumAdapter
 
 const val RECENT_PLAYED = 0
 
 class HomeViewModel : ViewModel() {
     val categories = MutableLiveData<MutableList<HomeCategory>>()
+    val recentlyPlayed = MutableLiveData<AlbumAdapter>()
 
     init {
-        viewModelScope.launch {
-            initializeCategories()
-        }
+        initializeCategories()
     }
 
     private fun initializeCategories() {
         categories.value = ArrayList()
 
         // Init Recent Played
-        categories.value?.add(RECENT_PLAYED, HomeCategory("Recent Played", null))
+        categories.value?.add(RECENT_PLAYED, HomeCategory("Recently Played", recentlyPlayed.value))
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        Timber.i("HomeViewModel Destroyed")
+    fun onSetCategory(type: Int, adapter: RecyclerView.Adapter<RecyclerView.ViewHolder>){
+        categories.value?.get(type)?.adapter = adapter
     }
 }
