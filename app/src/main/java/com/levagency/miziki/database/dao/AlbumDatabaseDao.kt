@@ -1,26 +1,17 @@
 package com.levagency.miziki.database.dao
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Update
-import com.levagency.miziki.album.entity.Album
+import androidx.room.*
+import com.levagency.miziki.domain.album.entity.DatabaseAlbum
 
 @Dao
 interface AlbumDatabaseDao {
-    @Insert
-    suspend fun insert(album: Album)
-
-    @Update
-    suspend fun update(album: Album)
-
-    @Query("DELETE FROM album")
-    suspend fun clear()
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertAll(albums: List<DatabaseAlbum>)
 
     @Query("SELECT * FROM album order by id DESC")
-    fun getAllAlbums(): LiveData<List<Album>>
+    fun getAlbums(): LiveData<List<DatabaseAlbum>>
 
     @Query("SELECT * FROM album ORDER BY id DESC LIMIT 1")
-    fun getAlbum(): LiveData<Album?>
+    fun getAlbum(): LiveData<DatabaseAlbum?>
 }

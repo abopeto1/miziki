@@ -5,32 +5,31 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.levagency.miziki.database.dao.AlbumDatabaseDao
-import com.levagency.miziki.album.entity.Album
+import com.levagency.miziki.database.dao.PersonDatabaseDao
+import com.levagency.miziki.domain.album.entity.DatabaseAlbum
+import com.levagency.miziki.domain.person.entity.DatabasePerson
 
-@Database(entities = [Album::class], version = 1, exportSchema = false)
-abstract class MizikiDatabase : RoomDatabase() {
-    abstract val albumDatabaseDao: AlbumDatabaseDao
+private lateinit var INSTANCE: MizikiDatabase
 
-    companion object {
-        @Volatile
-        private var INSTANCE: MizikiDatabase? = null
-
-        fun getInstance(context: Context): MizikiDatabase {
-            synchronized(this) {
-                var instance = INSTANCE
-
-                if(instance == null) {
-                    instance = Room.databaseBuilder(
-                        context.applicationContext,
-                        MizikiDatabase::class.java,
-                        "sanjola_database"
-                    ).fallbackToDestructiveMigration().build()
-
-                    INSTANCE = instance
-                }
-
-                return instance
-            }
+fun getDatabase(context: Context): MizikiDatabase {
+    synchronized(MizikiDatabase::class.java){
+        if(!::INSTANCE.isInitialized){
+            INSTANCE = Room.databaseBuilder(
+                context.applicationContext,
+                MizikiDatabase::class.java,
+                "mizikidb"
+            ).build()
         }
+        return INSTANCE
     }
+}
+@Database(
+    entities = [
+        DatabaseAlbum::class,
+        DatabasePerson::class
+    ], version = 1
+)
+abstract class MizikiDatabase : RoomDatabase() {
+    abstract val albumDao: AlbumDatabaseDao
+    abstract val personDao: PersonDatabaseDao
 }

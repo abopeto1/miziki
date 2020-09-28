@@ -6,25 +6,25 @@
     <data>
         <variable
             name="album"
-            type="com.levagency.miziki.album.entity.Album" />
+            type="com.levagency.miziki.domain.album.entity.Album" />
         <variable
             name="clickListener"
-            type="com.levagency.miziki.album.listener.AlbumListener" />
+            type="com.levagency.miziki.domain.album.listener.AlbumListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="@{() -> clickListener.onClick(album)}"
-        android:padding="16dp">
+        android:padding="@dimen/activity_horizontal_margin">
 
         <ImageView
             android:id="@+id/album_image"
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:layout_marginTop="8dp"
-            android:background="#FFBFCB"
             android:contentDescription="@string/music_label"
+            android:background="@drawable/ic_rounded_corner_background"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -35,11 +35,12 @@
             android:id="@+id/album_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/small_margin_horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/album_image"
             android:text="@{album.name}"
-            tools:text="Album Title" />
+            style="@style/title"
+            tools:text="DatabaseAlbum Title" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

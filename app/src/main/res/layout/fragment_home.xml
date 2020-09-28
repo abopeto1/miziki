@@ -7,7 +7,7 @@
             type="com.levagency.miziki.controllers.fragments.ui.HomeViewModel" />
         <variable
             name="albumViewModel"
-            type="com.levagency.miziki.album.viewmodel.AlbumViewModel"
+            type="com.levagency.miziki.domain.album.viewmodel.AlbumViewModel"
             />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -17,16 +17,25 @@
 
         <TextView
             android:id="@+id/music_title"
-            android:layout_width="0dp"
+            style="@style/headline1"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:text="@string/music_label"
-            android:textColor="@android:color/black"
-            android:textSize="36sp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/home_label"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <ProgressBar
+            android:id="@+id/loading_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/homeList"
             android:layout_width="0dp"

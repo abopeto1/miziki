@@ -1,6 +1,7 @@
 package com.levagency.miziki.network
 
-import com.levagency.miziki.album.entity.Album
+import com.levagency.miziki.domain.album.entity.NetworkAlbum
+import com.levagency.miziki.domain.album.entity.NetworkAlbumContainer
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import retrofit2.Retrofit
@@ -13,18 +14,19 @@ private val moshi = Moshi.Builder()
     .add(KotlinJsonAdapterFactory())
     .build()
 
-private val retrofit = Retrofit.Builder()
-    .addConverterFactory(MoshiConverterFactory.create(moshi))
-    .baseUrl(BASE_URL)
-    .build()
-
 interface MizikiApiService {
     @GET("albums")
-    suspend fun getAlbums(): List<Album>
+    suspend fun getAlbums(): List<NetworkAlbum>
+
+    @GET("persons")
+    suspend fun getPersons(): NetworkPersonContainer
 }
 
 object MizikiApi{
-    val retrofitService: MizikiApiService by lazy {
-        retrofit.create(MizikiApiService::class.java)
-    }
+    private val retrofit = Retrofit.Builder()
+        .baseUrl(BASE_URL)
+        .addConverterFactory(MoshiConverterFactory.create(moshi))
+        .build()
+
+    val mizikiNetwork: MizikiApiService = retrofit.create(MizikiApiService::class.java)
 }
