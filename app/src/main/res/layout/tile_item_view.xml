@@ -15,13 +15,14 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="@{() -> clickListener.onClick(album)}"
-        android:padding="@dimen/activity_horizontal_margin">
+        android:paddingStart="@dimen/activity_horizontal_margin"
+        android:paddingEnd="@dimen/small_margin_horizontal"
+        android:onClick="@{() -> clickListener.onClick(album)}">
 
         <ImageView
             android:id="@+id/album_image"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
+            android:layout_width="@dimen/small_tile"
+            android:layout_height="@dimen/small_tile"
             android:layout_marginTop="8dp"
             android:contentDescription="@string/music_label"
             android:background="@drawable/ic_rounded_corner_background"
@@ -33,7 +34,7 @@
 
         <TextView
             android:id="@+id/album_title"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/small_tile"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/small_margin_horizontal"
             app:layout_constraintEnd_toEndOf="parent"
@@ -41,6 +42,6 @@
             app:layout_constraintTop_toBottomOf="@+id/album_image"
             android:text="@{album.name}"
             style="@style/title"
-            tools:text="DatabaseAlbum Title" />
+            tools:text="Album Title" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
