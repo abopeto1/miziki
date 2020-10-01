@@ -18,18 +18,21 @@ import com.levagency.miziki.domain.album.factory.AlbumViewModelFactory
 import com.levagency.miziki.domain.album.listener.AlbumListener
 import com.levagency.miziki.controllers.fragments.ui.*
 import com.levagency.miziki.databinding.FragmentHomeBinding
-import timber.log.Timber
 
 class HomeFragment : Fragment() {
     private lateinit var homeViewModel: HomeViewModel
+    private lateinit var viewModelFactory: HomeViewModelFactory
     private lateinit var binding: FragmentHomeBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
+        // Inflate the layout for this fragment if binding is not initialized
+        if(!this::binding.isInitialized){
+            binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
+        }
+
         binding.lifecycleOwner = this
         // Get Application
         val application = requireNotNull(this.activity).application
@@ -38,7 +41,7 @@ class HomeFragment : Fragment() {
         initHomeCategories(binding)
 
         // Initialize Recent Played
-        initRecentPlayed(binding, application)
+//        initRecentPlayed(binding, application)
         initMakeMondayMoreProductive(binding, application)
 
         return binding.root
@@ -46,9 +49,9 @@ class HomeFragment : Fragment() {
 
     private fun initHomeCategories(binding: FragmentHomeBinding) {
         val homeAdapter = HomeAdapter()
-        val viewModelProvider = HomeViewModelFactory()
+        viewModelFactory = HomeViewModelFactory(this.lifecycle, requireNotNull(this.activity).application)
 
-        homeViewModel = ViewModelProvider(this, viewModelProvider).get(HomeViewModel::class.java)
+        homeViewModel = ViewModelProvider(this, viewModelFactory).get(HomeViewModel::class.java)
         binding.homeViewModel = homeViewModel
 
         binding.homeList.apply {
@@ -59,42 +62,47 @@ class HomeFragment : Fragment() {
         homeViewModel.categories.observe(viewLifecycleOwner, { list ->
             homeAdapter.addCategories(list)
         })
-    }
 
-    private fun initRecentPlayed(binding: FragmentHomeBinding, application: Application){
-        // Create an instance of the ViewModel Factory
-//        val dataSource = MizikiDatabase.getInstance(application).albumDatabaseDao
-//        val albumDataRepository = AlbumDataRepository(dataSource)
-        val viewModelFactory = AlbumViewModelFactory(app = application)
-
-        // Get a reference to the ViewModel associated with this fragment
-        val albumViewModel = ViewModelProvider(this, viewModelFactory).get(AlbumViewModel::class.java)
-
-        binding.albumViewModel = albumViewModel
-
-        val albumAdapter = AlbumAdapter(AlbumListener { albumId ->
-            Toast.makeText(context, "$albumId", Toast.LENGTH_LONG).show()
-            albumViewModel.onAlbumTileClicked(albumId)
-        })
-
-        homeViewModel.recentlyPlayed.value = albumAdapter
-
-        albumViewModel.navigateToAlbumDetail.observe(viewLifecycleOwner, { albumId ->
-            albumId?.let {
-                this.findNavController().navigate(
-                    HomeFragmentDirections.actionMusicFragmentToFavoritesFragment()
-                )
-                albumViewModel.onAlbumTileNavigated()
-            }
-        })
-
-        albumViewModel.albums.observe(viewLifecycleOwner, {
-            it.let {
-                albumAdapter.addHeaderAndSubmitList(it)
-                binding.executePendingBindings()
-            }
+        homeViewModel.recentlyPlayedData.observe(viewLifecycleOwner, {
+            binding.homeViewModel?.recentlyPlayed?.value?.addHeaderAndSubmitList(it)
         })
     }
+
+//    private fun initRecentPlayed(binding: FragmentHomeBinding, application: Application){
+//        // Create an instance of the ViewModel Factory
+////        val dataSource = MizikiDatabase.getInstance(application).albumDatabaseDao
+////        val albumDataRepository = AlbumDataRepository(dataSource)
+//        val viewModelFactory = AlbumViewModelFactory(app = application)
+//
+//        // Get a reference to the ViewModel associated with this fragment
+//        val albumViewModel = ViewModelProvider(this, viewModelFactory).get(AlbumViewModel::class.java)
+//
+//        binding.albumViewModel = albumViewModel
+//
+//        val albumAdapter = AlbumAdapter(AlbumListener { _ ->
+////            Toast.makeText(context, "$albumId", Toast.LENGTH_LONG).show()
+////            albumViewModel.onAlbumTileClicked(albumId)
+//            Navigation.createNavigateOnClickListener(R.id.action_musicFragment_to_favoritesFragment, null)
+//        })
+//
+//        homeViewModel.recentlyPlayed.value = albumAdapter
+//
+//        albumViewModel.navigateToAlbumDetail.observe(viewLifecycleOwner, { albumId ->
+//            albumId?.let {
+//                this.findNavController().navigate(
+//                    HomeFragmentDirections.actionMusicFragmentToFavoritesFragment()
+//                )
+//                albumViewModel.onAlbumTileNavigated()
+//            }
+//        })
+//
+//        albumViewModel.albums.observe(viewLifecycleOwner, {
+//            it.let {
+//                albumAdapter.addHeaderAndSubmitList(it)
+//                binding.executePendingBindings()
+//            }
+//        })
+//    }
 
     private fun initMakeMondayMoreProductive(binding: FragmentHomeBinding, application: Application){
         // Create an instance of the ViewModel Factory
@@ -136,7 +144,6 @@ class HomeFragment : Fragment() {
 
         homeViewModel.categories.observe(viewLifecycleOwner, {
             it.let {
-                Timber.i(it.toString())
                 val homeAdapter = binding.homeList.adapter as HomeAdapter
                 homeAdapter.addCategories(it)
             }
@@ -153,10 +160,5 @@ class HomeFragment : Fragment() {
                 binding.homeViewModel?.categories?.value?.get(MAKE_MONDAY_MORE_PRODUCTIVE)?.adapter = it
             }
         })
-
-    }
-    override fun onDestroy() {
-        super.onDestroy()
-        Timber.i("Home Fragment Destroyed")
     }
 }

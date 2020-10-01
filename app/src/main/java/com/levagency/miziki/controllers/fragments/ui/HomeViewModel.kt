@@ -1,10 +1,16 @@
 package com.levagency.miziki.controllers.fragments.ui
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.recyclerview.widget.RecyclerView
+import android.app.Application
+import androidx.lifecycle.*
+import androidx.navigation.Navigation
+import com.levagency.miziki.R
+import com.levagency.miziki.database.database.getDatabase
 import com.levagency.miziki.domain.album.adapter.AlbumAdapter
+import com.levagency.miziki.domain.album.listener.AlbumListener
+import com.levagency.miziki.domain.album.repository.AlbumDataRepository
+import kotlinx.coroutines.launch
+import timber.log.Timber
+import java.io.IOException
 
 const val RECENT_PLAYED = 0
 const val MAKE_MONDAY_MORE_PRODUCTIVE = 1
@@ -15,22 +21,26 @@ const val NEW_RELEASES = 5
 const val RECOMMEND = 6
 const val POPULAR_ARTISTS = 7
 
-class HomeViewModel : ViewModel() {
+class HomeViewModel(lifecycle: Lifecycle, application: Application) : ViewModel(), LifecycleObserver {
+    private val albumRepository = AlbumDataRepository(getDatabase(application))
     private val _loading = MutableLiveData<Boolean>()
-    val loading: LiveData<Boolean>
-            get() = _loading
+
     val categories = MutableLiveData<MutableList<HomeCategory>>()
+
     val recentlyPlayed = MutableLiveData<AlbumAdapter>()
+    val recentlyPlayedData = albumRepository.localAlbums
     val makeMondayMoreProductive = MutableLiveData<AlbumAdapter>()
 
     init {
-        initializeCategories()
+        lifecycle.addObserver(this)
     }
 
+    @OnLifecycleEvent(Lifecycle.Event.ON_START)
     private fun initializeCategories() {
         categories.value = ArrayList()
 
         // Init Recent Played
+        initRecentPlayed()
         categories.value?.add(RECENT_PLAYED, HomeCategory("Recently Played", recentlyPlayed.value))
 
         // Init Make Monday more productive
@@ -60,7 +70,23 @@ class HomeViewModel : ViewModel() {
         _loading.value = false
     }
 
-    fun onSetCategory(type: Int, adapter: RecyclerView.Adapter<RecyclerView.ViewHolder>){
-        categories.value?.get(type)?.adapter = adapter
-    }
+    private fun initRecentPlayed() =
+        viewModelScope.launch {
+            try {
+                val albumAdapter = AlbumAdapter(AlbumListener {
+//            Toast.makeText(context, "$albumId", Toast.LENGTH_LONG).show()
+//            albumViewModel.onAlbumTileClicked(albumId)
+                    Navigation.createNavigateOnClickListener(R.id.action_musicFragment_to_favoritesFragment, null)
+                })
+                recentlyPlayed.value = albumAdapter
+
+                albumRepository.refreshAlbums()
+                recentlyPlayedData.value?.let { recentlyPlayed.value?.addHeaderAndSubmitList(it) }
+            } catch (e: IOException){
+                Timber.i(e)
+            }
+        }
+//    fun onSetCategory(type: Int, adapter: RecyclerView.Adapter<RecyclerView.ViewHolder>){
+//        categories.value?.get(type)?.adapter = adapter
+//    }
 }
