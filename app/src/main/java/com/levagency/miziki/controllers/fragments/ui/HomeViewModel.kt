@@ -8,6 +8,8 @@ import com.levagency.miziki.database.database.getDatabase
 import com.levagency.miziki.domain.album.adapter.AlbumAdapter
 import com.levagency.miziki.domain.album.listener.AlbumListener
 import com.levagency.miziki.domain.album.repository.AlbumDataRepository
+import com.levagency.miziki.domain.genre.adapter.GenreListAdapter
+import com.levagency.miziki.domain.genre.entity.Genre
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.IOException
@@ -23,13 +25,19 @@ const val POPULAR_ARTISTS = 7
 
 class HomeViewModel(lifecycle: Lifecycle, application: Application) : ViewModel(), LifecycleObserver {
     private val albumRepository = AlbumDataRepository(getDatabase(application))
-    private val _loading = MutableLiveData<Boolean>()
 
     val categories = MutableLiveData<MutableList<HomeCategory>>()
+
+    // status for Loading
+    private var _showLoadingProgressBar = MutableLiveData<Boolean>()
+    val showLoadingProgressBar: LiveData<Boolean>
+        get() = _showLoadingProgressBar
 
     val recentlyPlayed = MutableLiveData<AlbumAdapter>()
     val recentlyPlayedData = albumRepository.localAlbums
     val makeMondayMoreProductive = MutableLiveData<AlbumAdapter>()
+
+    val browser = MutableLiveData<GenreListAdapter>()
 
     init {
         lifecycle.addObserver(this)
@@ -47,7 +55,7 @@ class HomeViewModel(lifecycle: Lifecycle, application: Application) : ViewModel(
         categories.value?.add(MAKE_MONDAY_MORE_PRODUCTIVE, HomeCategory("Make Monday More Productive", makeMondayMoreProductive.value))
 
         // Init Browser
-        categories.value?.add(BROWSE, HomeCategory("Browse", makeMondayMoreProductive.value))
+        categories.value?.add(BROWSE, HomeCategory("Browse", browser.value))
 
         // Init Playlist Picks
         categories.value?.add(PLAYLIST_PICKS, HomeCategory("Playlist Picks", makeMondayMoreProductive.value))
@@ -67,7 +75,7 @@ class HomeViewModel(lifecycle: Lifecycle, application: Application) : ViewModel(
         // Init New Releases For You
         categories.value?.add(POPULAR_ARTISTS, HomeCategory("Popular Artists", makeMondayMoreProductive.value))
 
-        _loading.value = false
+        doneShowingLoadingProgressBar()
     }
 
     private fun initRecentPlayed() =
@@ -89,4 +97,8 @@ class HomeViewModel(lifecycle: Lifecycle, application: Application) : ViewModel(
 //    fun onSetCategory(type: Int, adapter: RecyclerView.Adapter<RecyclerView.ViewHolder>){
 //        categories.value?.get(type)?.adapter = adapter
 //    }
+
+    private fun doneShowingLoadingProgressBar(){
+        _showLoadingProgressBar.value = false
+    }
 }

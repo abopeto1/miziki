@@ -7,6 +7,8 @@ import androidx.room.RoomDatabase
 import com.levagency.miziki.database.dao.AlbumDatabaseDao
 import com.levagency.miziki.database.dao.PersonDatabaseDao
 import com.levagency.miziki.domain.album.entity.DatabaseAlbum
+import com.levagency.miziki.domain.genre.entity.DatabaseGenre
+import com.levagency.miziki.domain.genre.entity.GenreDatabaseDao
 import com.levagency.miziki.domain.person.entity.DatabasePerson
 
 private lateinit var INSTANCE: MizikiDatabase
@@ -26,10 +28,12 @@ fun getDatabase(context: Context): MizikiDatabase {
 @Database(
     entities = [
         DatabaseAlbum::class,
-        DatabasePerson::class
+        DatabasePerson::class,
+        DatabaseGenre::class
     ], version = 1
 )
 abstract class MizikiDatabase : RoomDatabase() {
     abstract val albumDao: AlbumDatabaseDao
     abstract val personDao: PersonDatabaseDao
+    abstract val genreDao: GenreDatabaseDao
 }

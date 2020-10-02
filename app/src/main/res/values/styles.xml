@@ -18,6 +18,11 @@
         <item name="android:textColor">@android:color/white</item>
         <item name="fontFamily">@font/lato_bold</item>
     </style>
+    <style name="headline3">
+        <item name="android:textSize">@dimen/headline3</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="fontFamily">@font/lato_bold</item>
+    </style>
     <style name="title">
         <item name="android:textSize">@dimen/title</item>
         <item name="android:textColor">@android:color/white</item>
