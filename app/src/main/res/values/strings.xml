@@ -4,4 +4,5 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="favorites_label">Favorites</string>
     <string name="home_label">Home</string>
+    <string name="view_all">View All</string>
 </resources>

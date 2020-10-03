@@ -18,9 +18,10 @@
         <TextView
             android:id="@+id/title"
             style="@style/headline2"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/activity_horizontal_margin"
+            app:layout_constraintEnd_toStartOf="@+id/view_all_button"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Section Title" />
@@ -36,6 +37,21 @@
             app:layout_constraintTop_toBottomOf="@+id/title"
             android:text="@{homeCategory.description}"
             tools:text="Explore by genre and mood" />
+
+        <TextView
+            android:id="@+id/view_all_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#00FFFFFF"
+            android:text="@string/view_all"
+            style="@style/sub_title"
+            android:textSize="16sp"
+            android:textAlignment="center"
+            android:textColor="@color/subtitle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:drawableEndCompat="@drawable/ic_arrow_right"
+            />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/home_item_list"
