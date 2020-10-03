@@ -2,7 +2,9 @@ package com.levagency.miziki.controllers.fragments.ui
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
@@ -27,7 +29,8 @@ class HomeDiffCallback : DiffUtil.ItemCallback<HomeCategory>(){
 class HomeCategory(
     val title: String,
     var adapter: RecyclerView.Adapter<RecyclerView.ViewHolder>? = null,
-    var description: String? = null
+    var description: String? = null,
+    var navigationAction: Int? = null,
 )
 
 class HomeAdapter : ListAdapter<HomeCategory, RecyclerView.ViewHolder>(HomeDiffCallback()) {
@@ -38,6 +41,12 @@ class HomeAdapter : ListAdapter<HomeCategory, RecyclerView.ViewHolder>(HomeDiffC
             binding.homeCategory = item
             binding.title.text = item.title
 
+            if(item.navigationAction != null){
+                binding.viewAllButton.visibility = View.VISIBLE
+                binding.viewAllButton.setOnClickListener(
+                    Navigation.createNavigateOnClickListener(item.navigationAction!!)
+                )
+            }
             // set recycler view
             binding.homeItemList.apply {
                 setHasFixedSize(true)

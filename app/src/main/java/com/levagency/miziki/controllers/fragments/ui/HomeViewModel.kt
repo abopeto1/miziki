@@ -59,7 +59,7 @@ class HomeViewModel(lifecycle: Lifecycle, application: Application) : ViewModel(
         // Init Browser
         categories.value?.add(
             BROWSE,
-            HomeCategory("Browse", browser.value, "Explore by genre and mood")
+            HomeCategory("Browse", browser.value, "Explore by genre and mood", R.id.action_musicFragment_to_genreFragment)
         )
 
         // Init Playlist Picks
