@@ -4,7 +4,6 @@ import android.app.Application
 import androidx.lifecycle.*
 import com.levagency.miziki.database.database.getDatabase
 import com.levagency.miziki.domain.genre.adapter.GenreListAdapter
-import com.levagency.miziki.domain.genre.entity.Genre
 import com.levagency.miziki.domain.genre.repository.GenreRepository
 import kotlinx.coroutines.launch
 import timber.log.Timber

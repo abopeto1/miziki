@@ -23,7 +23,7 @@ fun List<DatabaseAlbum>.asDomainModel(): List<Album> {
         Album(
             id = it.id,
             name = it.name,
-            image = it.name,
+            image = it.image,
             byArtist = it.byArtist
         )
     }

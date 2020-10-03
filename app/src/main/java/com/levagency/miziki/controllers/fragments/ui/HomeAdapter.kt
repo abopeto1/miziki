@@ -24,7 +24,11 @@ class HomeDiffCallback : DiffUtil.ItemCallback<HomeCategory>(){
     }
 }
 
-class HomeCategory(val title: String, var adapter: RecyclerView.Adapter<RecyclerView.ViewHolder>? = null)
+class HomeCategory(
+    val title: String,
+    var adapter: RecyclerView.Adapter<RecyclerView.ViewHolder>? = null,
+    var description: String? = null
+)
 
 class HomeAdapter : ListAdapter<HomeCategory, RecyclerView.ViewHolder>(HomeDiffCallback()) {
     private val adapterScope = CoroutineScope(Dispatchers.Default)

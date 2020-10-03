@@ -30,7 +30,8 @@ fun getDatabase(context: Context): MizikiDatabase {
         DatabaseAlbum::class,
         DatabasePerson::class,
         DatabaseGenre::class
-    ], version = 1
+    ], version = 1,
+    exportSchema = false
 )
 abstract class MizikiDatabase : RoomDatabase() {
     abstract val albumDao: AlbumDatabaseDao

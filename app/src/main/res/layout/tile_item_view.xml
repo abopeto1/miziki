@@ -16,12 +16,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="@{() -> clickListener.onClick(album)}"
-        android:layout_marginStart="8dp">
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="8dp">
 
         <ImageView
             android:id="@+id/album_image"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
             android:layout_marginTop="8dp"
             android:contentDescription="@string/music_label"
             android:background="@drawable/ic_rounded_corner_background"
@@ -29,11 +30,13 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:imageUrl="@{album.image}"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
             tools:src="@drawable/ic_music" />
 
         <TextView
             android:id="@+id/album_title"
-            android:layout_width="wrap_content"
+            android:layout_width="96dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/small_margin_horizontal"
             app:layout_constraintEnd_toEndOf="parent"

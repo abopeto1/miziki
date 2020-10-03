@@ -5,6 +5,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="fontFamily">@font/lato_regular</item>
     </style>
 
     <!-- Headline -->
@@ -27,5 +28,9 @@
         <item name="android:textSize">@dimen/title</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="fontFamily">@font/lato_regular</item>
+    </style>
+    <style name="sub_title">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/subtitle</item>
     </style>
 </resources>

@@ -9,7 +9,6 @@ import com.levagency.miziki.domain.album.adapter.AlbumAdapter
 import com.levagency.miziki.domain.album.listener.AlbumListener
 import com.levagency.miziki.domain.album.repository.AlbumDataRepository
 import com.levagency.miziki.domain.genre.adapter.GenreListAdapter
-import com.levagency.miziki.domain.genre.entity.Genre
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.IOException
@@ -49,31 +48,52 @@ class HomeViewModel(lifecycle: Lifecycle, application: Application) : ViewModel(
 
         // Init Recent Played
         initRecentPlayed()
-        categories.value?.add(RECENT_PLAYED, HomeCategory("Recently Played", recentlyPlayed.value))
+        categories.value?.add(RECENT_PLAYED, HomeCategory("Recently Played", recentlyPlayed.value,))
 
         // Init Make Monday more productive
-        categories.value?.add(MAKE_MONDAY_MORE_PRODUCTIVE, HomeCategory("Make Monday More Productive", makeMondayMoreProductive.value))
+        categories.value?.add(MAKE_MONDAY_MORE_PRODUCTIVE, HomeCategory(
+            "Make Monday More Productive",
+            makeMondayMoreProductive.value,
+        ))
 
         // Init Browser
-        categories.value?.add(BROWSE, HomeCategory("Browse", browser.value))
+        categories.value?.add(
+            BROWSE,
+            HomeCategory("Browse", browser.value, "Explore by genre and mood")
+        )
 
         // Init Playlist Picks
-        categories.value?.add(PLAYLIST_PICKS, HomeCategory("Playlist Picks", makeMondayMoreProductive.value))
+        categories.value?.add(PLAYLIST_PICKS, HomeCategory(
+            "Playlist Picks",
+            makeMondayMoreProductive.value,
+        ))
 
         // Init Podcasts
-        categories.value?.add(PODCASTS, HomeCategory("Podcasts", makeMondayMoreProductive.value))
+        categories.value?.add(PODCASTS, HomeCategory("Podcasts", makeMondayMoreProductive.value,))
 
         // Init New Releases For You
-        categories.value?.add(NEW_RELEASES, HomeCategory("New Releases for You", makeMondayMoreProductive.value))
+        categories.value?.add(NEW_RELEASES, HomeCategory(
+            "New Releases for You",
+            makeMondayMoreProductive.value,
+        ))
 
         // Init New Releases For You
-        categories.value?.add(NEW_RELEASES, HomeCategory("New Releases for You", makeMondayMoreProductive.value))
+        categories.value?.add(NEW_RELEASES, HomeCategory(
+            "New Releases for You",
+            makeMondayMoreProductive.value,
+        ))
 
         // Init New Releases For You
-        categories.value?.add(RECOMMEND, HomeCategory("You might like these Artists", makeMondayMoreProductive.value))
+        categories.value?.add(RECOMMEND, HomeCategory(
+            "You might like these Artists",
+            makeMondayMoreProductive.value,
+        ))
 
         // Init New Releases For You
-        categories.value?.add(POPULAR_ARTISTS, HomeCategory("Popular Artists", makeMondayMoreProductive.value))
+        categories.value?.add(POPULAR_ARTISTS, HomeCategory(
+            "Popular Artists",
+            makeMondayMoreProductive.value,
+        ))
 
         doneShowingLoadingProgressBar()
     }

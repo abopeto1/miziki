@@ -12,6 +12,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="150dp"
         android:layout_height="85dp"
+        android:layout_marginStart="16dp"
         android:background="@drawable/ic_rounded_corner_background">
 
         <TextView
@@ -22,6 +23,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             style="@style/headline3"
+            android:text="@{genre.name}"
             tools:text="RUMBA" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
