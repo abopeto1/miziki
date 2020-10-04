@@ -7,17 +7,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import com.levagency.miziki.R
 import com.levagency.miziki.databinding.FragmentGenreBinding
-import com.levagency.miziki.domain.genre.adapter.GenreListAdapter
 import com.levagency.miziki.domain.genre.view_model.GenreViewModel
 import com.levagency.miziki.domain.genre.view_model.GenreViewModelFactory
 
 class GenreFragment : Fragment() {
     private lateinit var binding: FragmentGenreBinding
     private lateinit var genreViewModel: GenreViewModel
-    private val genreListAdapter = GenreListAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +40,7 @@ class GenreFragment : Fragment() {
         binding.genreList.apply {
             setHasFixedSize(true)
             layoutManager = GridLayoutManager(context, 2, GridLayoutManager.VERTICAL, false)
-            adapter = genreListAdapter
+            adapter = genreViewModel.genreListAdapter
         }
 
         // set observers
@@ -52,7 +51,10 @@ class GenreFragment : Fragment() {
 
     fun initObservers(){
         genreViewModel.genres.observe(viewLifecycleOwner, {
-            genreListAdapter.addGenres(it)
+            genreViewModel.genreListAdapter.addGenres(it)
+        })
+        genreViewModel.genreSelected.observe(viewLifecycleOwner, {
+            Navigation.createNavigateOnClickListener(R.id.action_genreFragment_to_genreSelectedFragment)
         })
     }
 }

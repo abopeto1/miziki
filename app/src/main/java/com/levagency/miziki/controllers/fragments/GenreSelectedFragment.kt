@@ -5,7 +5,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.levagency.miziki.R
+import com.levagency.miziki.databinding.FragmentGenreSelectedBinding
+import com.levagency.miziki.domain.genre.adapter.GenreSelectedListAdapter
+import com.levagency.miziki.domain.genre.view_model.GenreViewModel
+import com.levagency.miziki.domain.genre.view_model.GenreViewModelFactory
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -18,43 +26,32 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class GenreSelectedFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private val genreViewModel: GenreViewModel by activityViewModels()
+    private lateinit var binding: FragmentGenreSelectedBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_genre_selected, container, false)
+        if (!this::binding.isInitialized) {
+            binding = DataBindingUtil.inflate(inflater, R.layout.fragment_genre_selected, container, false)
+        }
+
+        binding.lifecycleOwner = this
+        binding.genreSelectedList.apply {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = GenreSelectedListAdapter()
+        }
+
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment GenreSelectedFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            GenreSelectedFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        genreViewModel.genreSelected.observe(viewLifecycleOwner, {
+            genreViewModel.getCategoriesForGenreSelected()
+        })
     }
 }

@@ -15,6 +15,9 @@
         <action
             android:id="@+id/action_musicFragment_to_genreFragment"
             app:destination="@id/genreFragment" />
+        <action
+            android:id="@+id/action_musicFragment_to_genreSelectedFragment"
+            app:destination="@id/genreSelectedFragment" />
     </fragment>
     <fragment
         android:id="@+id/favoritesFragment"
@@ -26,5 +29,13 @@
         android:id="@+id/genreFragment"
         android:name="com.levagency.miziki.controllers.fragments.GenreFragment"
         android:label="fragment_genre"
-        tools:layout="@layout/fragment_genre" />
+        tools:layout="@layout/fragment_genre" >
+        <action
+            android:id="@+id/action_genreFragment_to_genreSelectedFragment"
+            app:destination="@id/genreSelectedFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/genreSelectedFragment"
+        android:name="com.levagency.miziki.controllers.fragments.GenreSelectedFragment"
+        android:label="GenreSelectedFragment" />
 </navigation>

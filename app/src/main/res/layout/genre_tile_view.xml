@@ -7,9 +7,13 @@
         <variable
             name="genre"
             type="com.levagency.miziki.domain.genre.entity.Genre" />
+        <variable
+            name="clickListener"
+            type="com.levagency.miziki.domain.genre.listener.GenreListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/item_container"
         android:layout_width="150dp"
         android:layout_height="85dp"
         android:layout_marginTop="8dp"

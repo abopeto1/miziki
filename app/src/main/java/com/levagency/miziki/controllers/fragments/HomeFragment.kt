@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.levagency.miziki.R
@@ -92,6 +93,11 @@ class HomeFragment : Fragment() {
 
         genreViewModel.genres.observe(viewLifecycleOwner, {
             homeViewModel.browser.value?.addGenres(it)
+        })
+
+        // Observe one item selected
+        genreViewModel.genreSelected.observe(viewLifecycleOwner, {
+            Navigation.createNavigateOnClickListener(R.id.action_musicFragment_to_genreSelectedFragment)
         })
     }
     private fun initMakeMondayMoreProductive(binding: FragmentHomeBinding, application: Application){
