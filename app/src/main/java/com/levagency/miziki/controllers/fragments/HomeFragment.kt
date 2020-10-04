@@ -20,7 +20,6 @@ import com.levagency.miziki.controllers.fragments.ui.*
 import com.levagency.miziki.databinding.FragmentHomeBinding
 import com.levagency.miziki.domain.genre.view_model.GenreViewModel
 import com.levagency.miziki.domain.genre.view_model.GenreViewModelFactory
-import timber.log.Timber
 
 class HomeFragment : Fragment() {
     private lateinit var homeViewModel: HomeViewModel
@@ -29,7 +28,6 @@ class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Timber.i("Home Fragment Created")
         super.onCreate(savedInstanceState)
         if (!this::genreViewModel.isInitialized) {
             val genreViewModelFactory = GenreViewModelFactory(requireNotNull(this.activity).application)
