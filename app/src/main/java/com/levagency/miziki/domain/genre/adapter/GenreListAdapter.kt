@@ -14,6 +14,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 class GenreDiffCallback : DiffUtil.ItemCallback<Genre>() {
     override fun areItemsTheSame(oldItem: Genre, newItem: Genre): Boolean {
@@ -26,7 +27,10 @@ class GenreDiffCallback : DiffUtil.ItemCallback<Genre>() {
 
 }
 
-class GenreListAdapter(private val clickListener: GenreListener): ListAdapter<Genre, RecyclerView.ViewHolder>(
+class GenreListAdapter(
+    private val clickListener: GenreListener,
+    val navigationId: Int
+): ListAdapter<Genre, RecyclerView.ViewHolder>(
     GenreDiffCallback()
 ) {
     private val adapterScope = CoroutineScope(Dispatchers.Default)
@@ -35,13 +39,14 @@ class GenreListAdapter(private val clickListener: GenreListener): ListAdapter<Ge
     {
         fun bind(
             item: Genre,
-            clickListener: GenreListener
+            clickListener: GenreListener,
+            navigationId: Int
         ){
             binding.genre = item
             binding.clickListener = clickListener
             binding.itemContainer.apply {
                 setOnClickListener(
-                    Navigation.createNavigateOnClickListener(R.id.action_genreFragment_to_genreSelectedFragment)
+                    Navigation.createNavigateOnClickListener(navigationId)
                 )
             }
         }
@@ -66,7 +71,7 @@ class GenreListAdapter(private val clickListener: GenreListener): ListAdapter<Ge
             is ViewHolder -> {
                 val item = getItem(position)
 
-                holder.bind(item, clickListener)
+                holder.bind(item, clickListener, navigationId)
             }
         }
     }

@@ -2,9 +2,8 @@ package com.levagency.miziki.domain.genre.view_model
 
 import android.app.Application
 import androidx.lifecycle.*
-import androidx.navigation.Navigation
-import com.levagency.miziki.database.database.getDatabase
 import com.levagency.miziki.R
+import com.levagency.miziki.database.database.getDatabase
 import com.levagency.miziki.domain.genre.adapter.GenreChild
 import com.levagency.miziki.domain.genre.adapter.GenreListAdapter
 import com.levagency.miziki.domain.genre.listener.GenreListener
@@ -19,9 +18,9 @@ class GenreViewModel(application: Application) : AndroidViewModel(application) {
     val genreSelected = MutableLiveData<Long>()
 
     private val genreRepository = GenreRepository(getDatabase(application))
-    val genreListAdapter = GenreListAdapter(GenreListener { genreId ->
+    var genreListAdapter = GenreListAdapter(GenreListener { genreId ->
         genreSelected.value = genreId
-    })
+    }, R.id.action_musicFragment_to_genreFragment)
 
     // Set genres
     val genres = genreRepository.genres
@@ -50,7 +49,7 @@ class GenreViewModel(application: Application) : AndroidViewModel(application) {
         return listOf(
             GenreChild("Popular in these weeks", GenreListAdapter(GenreListener { genreId ->
                 genreSelected.value = genreId
-            }))
+            }, R.id.action_genreFragment_to_genreSelectedFragment))
         )
     }
 }
