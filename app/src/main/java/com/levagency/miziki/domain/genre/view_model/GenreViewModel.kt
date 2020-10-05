@@ -56,7 +56,7 @@ class GenreViewModel(application: Application) : AndroidViewModel(application) {
         )
     }
 
-    fun selectGenre(item: Genre){
+    private fun selectGenre(item: Genre){
         Timber.i(item.toString())
         selected.value = item
     }

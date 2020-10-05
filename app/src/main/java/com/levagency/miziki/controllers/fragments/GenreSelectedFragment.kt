@@ -16,6 +16,7 @@ import timber.log.Timber
 
 class GenreSelectedFragment : Fragment() {
     private val genreViewModel: GenreViewModel by activityViewModels()
+    private val genreSelectedListAdapter = GenreSelectedListAdapter()
     private lateinit var binding: FragmentGenreSelectedBinding
 
     override fun onCreateView(
@@ -26,7 +27,7 @@ class GenreSelectedFragment : Fragment() {
         if (!this::binding.isInitialized) {
             binding = DataBindingUtil.inflate(inflater, R.layout.fragment_genre_selected, container, false)
         }
-        Timber.i(genreViewModel.toString())
+        
         binding.lifecycleOwner = this
 
         // Set Title
@@ -35,8 +36,8 @@ class GenreSelectedFragment : Fragment() {
         binding.genreSelectedList.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = GenreSelectedListAdapter()
         }
+        binding.genreSelectedList.adapter = genreSelectedListAdapter
 
         return binding.root
     }
@@ -45,6 +46,7 @@ class GenreSelectedFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         genreViewModel.selected.observe(viewLifecycleOwner,{
             binding.title.text = it.name
+            genreSelectedListAdapter.addChildren(genreViewModel.getCategoriesForGenreSelected())
         })
     }
 }
