@@ -13,4 +13,7 @@ interface GenreDatabaseDao {
 
     @Query("SELECT * FROM genre ORDER BY id DESC")
     fun getAll(): LiveData<List<DatabaseGenre>>
+
+    @Query("SELECT * FROM genre WHERE id = :id")
+    fun get(id: Long): LiveData<DatabaseGenre>
 }

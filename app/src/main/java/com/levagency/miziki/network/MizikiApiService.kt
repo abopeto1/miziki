@@ -8,6 +8,7 @@ import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Path
 
 private const val BASE_URL = "https://my-json-server.typicode.com/abopeto1/mizikidb/"
 
@@ -24,6 +25,9 @@ interface MizikiApiService {
 
     @GET("genres")
     suspend fun getGenres(): List<NetworkGenre>
+
+    @GET("genres/{id}")
+    suspend fun getGenre(@Path("id") id: Long): NetworkGenre
 }
 
 object MizikiApi{

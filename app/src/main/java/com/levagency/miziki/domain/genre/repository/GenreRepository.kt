@@ -3,6 +3,7 @@ package com.levagency.miziki.domain.genre.repository
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.levagency.miziki.database.database.MizikiDatabase
+import com.levagency.miziki.domain.genre.entity.DatabaseGenre
 import com.levagency.miziki.domain.genre.entity.Genre
 import com.levagency.miziki.domain.genre.entity.asDatabaseModel
 import com.levagency.miziki.domain.genre.entity.asDomainModel
@@ -24,4 +25,12 @@ class GenreRepository(
             database.genreDao.insertAll(networkGenres.asDatabaseModel())
         }
     }
+
+//    suspend fun getGenre(id: Long): LiveData<Genre> {
+//        withContext(Dispatchers.IO) {
+//            val networkGenre = MizikiApi.mizikiNetwork.getGenre(id)
+//
+//            database.genreDao.insertAll(listOf(networkGenre.asDatabaseModel()))
+//        }
+//    }
 }

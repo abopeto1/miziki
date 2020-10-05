@@ -29,7 +29,7 @@ class GenreDiffCallback : DiffUtil.ItemCallback<Genre>() {
 
 class GenreListAdapter(
     private val clickListener: GenreListener,
-    val navigationId: Int
+    private val navigationId: Int
 ): ListAdapter<Genre, RecyclerView.ViewHolder>(
     GenreDiffCallback()
 ) {
@@ -43,12 +43,13 @@ class GenreListAdapter(
             navigationId: Int
         ){
             binding.genre = item
-            binding.clickListener = clickListener
-            binding.itemContainer.apply {
-                setOnClickListener(
-                    Navigation.createNavigateOnClickListener(navigationId)
-                )
+            binding.itemContainer.setOnClickListener{
+                clickListener.onClick(item)
+                Navigation.findNavController(it).navigate(navigationId)
             }
+//            (
+//                Navigation.createNavigateOnClickListener(navigationId)
+//            )
         }
 
         companion object {

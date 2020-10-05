@@ -33,3 +33,12 @@ fun List<NetworkGenre>.asDatabaseModel(): List<DatabaseGenre> {
         )
     }
 }
+
+fun NetworkGenre.asDatabaseModel(): DatabaseGenre {
+    return let {
+        DatabaseGenre(
+            id = it.id,
+            name = it.name
+        )
+    }
+}

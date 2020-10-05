@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import com.levagency.miziki.R
 import com.levagency.miziki.databinding.FragmentGenreBinding
@@ -49,12 +48,9 @@ class GenreFragment : Fragment() {
         return binding.root
     }
 
-    fun initObservers(){
+    private fun initObservers(){
         genreViewModel.genres.observe(viewLifecycleOwner, {
             genreViewModel.genreListAdapter.addGenres(it)
-        })
-        genreViewModel.genreSelected.observe(viewLifecycleOwner, {
-            Navigation.createNavigateOnClickListener(R.id.action_genreFragment_to_genreSelectedFragment)
         })
     }
 }

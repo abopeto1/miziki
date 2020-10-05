@@ -2,10 +2,12 @@ package com.levagency.miziki.domain.genre.view_model
 
 import android.app.Application
 import androidx.lifecycle.*
+import androidx.navigation.Navigation
 import com.levagency.miziki.R
 import com.levagency.miziki.database.database.getDatabase
 import com.levagency.miziki.domain.genre.adapter.GenreChild
 import com.levagency.miziki.domain.genre.adapter.GenreListAdapter
+import com.levagency.miziki.domain.genre.entity.Genre
 import com.levagency.miziki.domain.genre.listener.GenreListener
 import com.levagency.miziki.domain.genre.repository.GenreRepository
 import kotlinx.coroutines.launch
@@ -14,13 +16,14 @@ import java.io.IOException
 import java.lang.IllegalArgumentException
 
 class GenreViewModel(application: Application) : AndroidViewModel(application) {
-    // Genre Selected
-    val genreSelected = MutableLiveData<Long>()
-
     private val genreRepository = GenreRepository(getDatabase(application))
-    var genreListAdapter = GenreListAdapter(GenreListener { genreId ->
-        genreSelected.value = genreId
-    }, R.id.action_musicFragment_to_genreFragment)
+
+    // Genre Selected
+    val selected = MutableLiveData<Genre>()
+
+    var genreListAdapter = GenreListAdapter(GenreListener { genre ->
+        selected.value = genre
+    }, R.id.action_musicFragment_to_genreSelectedFragment)
 
     // Set genres
     val genres = genreRepository.genres
@@ -47,10 +50,15 @@ class GenreViewModel(application: Application) : AndroidViewModel(application) {
         Timber.i("get children cat")
 
         return listOf(
-            GenreChild("Popular in these weeks", GenreListAdapter(GenreListener { genreId ->
-                genreSelected.value = genreId
+            GenreChild("Popular in these weeks", GenreListAdapter(GenreListener { genre ->
+                selectGenre(genre)
             }, R.id.action_genreFragment_to_genreSelectedFragment))
         )
+    }
+
+    fun selectGenre(item: Genre){
+        Timber.i(item.toString())
+        selected.value = item
     }
 }
 

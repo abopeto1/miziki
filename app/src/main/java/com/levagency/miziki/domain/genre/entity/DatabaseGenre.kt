@@ -23,3 +23,15 @@ fun List<DatabaseGenre>.asDomainModel(): List<Genre> {
         )
     }
 }
+
+/**
+ * Convert DatabaseGenre to Domain Genre Entity
+ */
+fun DatabaseGenre.asDomainModel(): Genre {
+    let {
+        return Genre(
+            id = it.id,
+            name = it.name
+        )
+    }
+}

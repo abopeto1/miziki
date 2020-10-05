@@ -8,8 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.levagency.miziki.R
@@ -20,22 +20,13 @@ import com.levagency.miziki.domain.album.listener.AlbumListener
 import com.levagency.miziki.controllers.fragments.ui.*
 import com.levagency.miziki.databinding.FragmentHomeBinding
 import com.levagency.miziki.domain.genre.view_model.GenreViewModel
-import com.levagency.miziki.domain.genre.view_model.GenreViewModelFactory
+import timber.log.Timber
 
 class HomeFragment : Fragment() {
     private lateinit var homeViewModel: HomeViewModel
     private lateinit var viewModelFactory: HomeViewModelFactory
-    private lateinit var genreViewModel: GenreViewModel
+    private val genreViewModel: GenreViewModel by activityViewModels()
     private lateinit var binding: FragmentHomeBinding
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        if (!this::genreViewModel.isInitialized) {
-            val genreViewModelFactory = GenreViewModelFactory(requireNotNull(this.activity).application)
-
-            genreViewModel = ViewModelProvider(this, genreViewModelFactory).get(GenreViewModel::class.java)
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,7 +43,7 @@ class HomeFragment : Fragment() {
         binding.lifecycleOwner = this
         // Get Application
         val application = requireNotNull(this.activity).application
-
+        Timber.i(genreViewModel.toString())
         // Initialize Recent Played
 //        initRecentPlayed(binding, application)
         initMakeMondayMoreProductive(binding, application)
@@ -93,11 +84,6 @@ class HomeFragment : Fragment() {
 
         genreViewModel.genres.observe(viewLifecycleOwner, {
             homeViewModel.browser.value?.addGenres(it)
-        })
-
-        // Observe one item selected
-        genreViewModel.genreSelected.observe(viewLifecycleOwner, {
-            Navigation.createNavigateOnClickListener(R.id.action_musicFragment_to_genreSelectedFragment)
         })
     }
     private fun initMakeMondayMoreProductive(binding: FragmentHomeBinding, application: Application){
