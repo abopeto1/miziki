@@ -12,10 +12,11 @@ import com.levagency.miziki.R
 import com.levagency.miziki.databinding.FragmentGenreSelectedBinding
 import com.levagency.miziki.domain.genre.adapter.GenreSelectedListAdapter
 import com.levagency.miziki.domain.genre.view_model.GenreViewModel
-import timber.log.Timber
+import com.levagency.miziki.domain.playlist.view_model.PlaylistViewModel
 
 class GenreSelectedFragment : Fragment() {
     private val genreViewModel: GenreViewModel by activityViewModels()
+    private val playlistViewModel: PlaylistViewModel by activityViewModels()
     private val genreSelectedListAdapter = GenreSelectedListAdapter()
     private lateinit var binding: FragmentGenreSelectedBinding
 
@@ -44,9 +45,14 @@ class GenreSelectedFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         genreViewModel.selected.observe(viewLifecycleOwner,{
             binding.title.text = it.name
             genreSelectedListAdapter.addChildren(genreViewModel.getCategoriesForGenreSelected())
+        })
+
+        playlistViewModel.playlists.observe(viewLifecycleOwner, {
+            genreViewModel.popularInWeek.value?.addPlaylists(it)
         })
     }
 }

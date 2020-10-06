@@ -10,6 +10,8 @@ import com.levagency.miziki.domain.album.entity.DatabaseAlbum
 import com.levagency.miziki.domain.genre.entity.DatabaseGenre
 import com.levagency.miziki.domain.genre.entity.GenreDatabaseDao
 import com.levagency.miziki.domain.person.entity.DatabasePerson
+import com.levagency.miziki.domain.playlist.entity.DatabasePlaylist
+import com.levagency.miziki.domain.playlist.entity.PlaylistDao
 
 private lateinit var INSTANCE: MizikiDatabase
 
@@ -29,7 +31,8 @@ fun getDatabase(context: Context): MizikiDatabase {
     entities = [
         DatabaseAlbum::class,
         DatabasePerson::class,
-        DatabaseGenre::class
+        DatabaseGenre::class,
+        DatabasePlaylist::class
     ], version = 1,
     exportSchema = false
 )
@@ -37,4 +40,5 @@ abstract class MizikiDatabase : RoomDatabase() {
     abstract val albumDao: AlbumDatabaseDao
     abstract val personDao: PersonDatabaseDao
     abstract val genreDao: GenreDatabaseDao
+    abstract val playlistDao: PlaylistDao
 }

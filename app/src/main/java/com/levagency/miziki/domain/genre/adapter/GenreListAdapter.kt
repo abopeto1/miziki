@@ -6,7 +6,6 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.levagency.miziki.R
 import com.levagency.miziki.databinding.GenreTileViewBinding
 import com.levagency.miziki.domain.genre.entity.Genre
 import com.levagency.miziki.domain.genre.listener.GenreListener
@@ -14,7 +13,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 
 class GenreDiffCallback : DiffUtil.ItemCallback<Genre>() {
     override fun areItemsTheSame(oldItem: Genre, newItem: Genre): Boolean {

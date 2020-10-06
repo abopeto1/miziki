@@ -9,7 +9,7 @@ import androidx.room.Query
 @Dao
 interface PlaylistDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(playlist: List<Playlist>)
+    fun insertAll(playlist: List<DatabasePlaylist>)
 
     @Query("SELECT * FROM playlist ORDER BY id ASC")
     fun getAll(): LiveData<List<DatabasePlaylist>>

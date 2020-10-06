@@ -15,14 +15,14 @@ data class NetworkPlaylist(
     @field:Json(name = "name") val name: String
 )
 
-fun List<NetworkPlaylist>.asDatabaseModel(): List<DatabasePlaylist> {
-    return map {
-        DatabasePlaylist(
-            id = it.id,
-            numTracks = it.numTracks,
-            description = it.description,
-            image = it.image,
-            name = it.name
-        )
-    }
-}
+//fun List<NetworkPlaylist>.asDatabaseModel(): List<DatabasePlaylist> {
+//    return map {
+//        DatabasePlaylist(
+//            id = it.id,
+//            numTracks = it.numTracks,
+//            description = it.description,
+//            image = it.image,
+//            name = it.name
+//        )
+//    }
+//}

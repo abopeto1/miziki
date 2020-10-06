@@ -1,7 +1,6 @@
 package com.levagency.miziki.network
 
 import com.levagency.miziki.domain.album.entity.NetworkAlbum
-import com.levagency.miziki.domain.album.entity.NetworkAlbumContainer
 import com.levagency.miziki.domain.genre.entity.NetworkGenre
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -37,4 +36,5 @@ object MizikiApi{
         .build()
 
     val mizikiNetwork: MizikiApiService = retrofit.create(MizikiApiService::class.java)
+    val playlistApiService: PlaylistApiService = retrofit.create(PlaylistApiService::class.java)
 }

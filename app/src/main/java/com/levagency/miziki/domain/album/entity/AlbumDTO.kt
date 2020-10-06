@@ -11,10 +11,10 @@ import com.squareup.moshi.JsonClass
  *  "albums": []
  * }
  */
-@JsonClass(generateAdapter = true)
-data class NetworkAlbumContainer(
-    val albums: List<NetworkAlbum>
-)
+//@JsonClass(generateAdapter = true)
+//data class NetworkAlbumContainer(
+//    val albums: List<NetworkAlbum>
+//)
 
 /**
  * Album in a app
@@ -27,16 +27,16 @@ data class NetworkAlbum(
     @field:Json(name="byArtist") val byArtist: Long
 )
 
-fun NetworkAlbumContainer.asDomainModel(): List<Album> {
-    return albums.map {
-        Album(
-            id = it.id,
-            name = it.name,
-            image = it.image,
-            byArtist = it.byArtist
-        )
-    }
-}
+//fun NetworkAlbumContainer.asDomainModel(): List<Album> {
+//    return albums.map {
+//        Album(
+//            id = it.id,
+//            name = it.name,
+//            image = it.image,
+//            byArtist = it.byArtist
+//        )
+//    }
+//}
 
 fun List<NetworkAlbum>.asDatabaseModel(): List<DatabaseAlbum> {
     return map {

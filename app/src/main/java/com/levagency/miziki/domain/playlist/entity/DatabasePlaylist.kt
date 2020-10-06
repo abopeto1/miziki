@@ -1,13 +1,14 @@
 package com.levagency.miziki.domain.playlist.entity
 
 import androidx.room.Entity
+import androidx.room.PrimaryKey
 
 /**
  * DatabasePlaylist represents a playlist room entity in the local storage database
  */
 @Entity(tableName = "playlist")
 data class DatabasePlaylist constructor(
-    val id: Long,
+    @PrimaryKey val id: Long,
     val numTracks: Int,
     val description: String,
     val image: String,

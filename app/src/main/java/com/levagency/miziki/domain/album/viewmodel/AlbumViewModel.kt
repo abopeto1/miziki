@@ -43,12 +43,12 @@ class AlbumViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     private fun refreshAlbumsFromRepository() =
-        viewModelScope.launch {
-            try {
-                albumRepository.refreshAlbums()
-                _status.value = AlbumApiStatus.DONE
-            } catch (e: IOException) {
-                _status.value = AlbumApiStatus.ERROR
+            viewModelScope.launch {
+                try {
+                    albumRepository.refreshAlbums()
+                    _status.value = AlbumApiStatus.DONE
+                } catch (e: IOException) {
+                    _status.value = AlbumApiStatus.ERROR
+                }
             }
-        }
 }
