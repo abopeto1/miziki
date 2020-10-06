@@ -12,7 +12,9 @@ import com.levagency.miziki.R
 import com.levagency.miziki.databinding.FragmentGenreSelectedBinding
 import com.levagency.miziki.domain.genre.adapter.GenreSelectedListAdapter
 import com.levagency.miziki.domain.genre.view_model.GenreViewModel
+import com.levagency.miziki.domain.playlist.adapter.PlaylistAdapter
 import com.levagency.miziki.domain.playlist.view_model.PlaylistViewModel
+import timber.log.Timber
 
 class GenreSelectedFragment : Fragment() {
     private val genreViewModel: GenreViewModel by activityViewModels()
@@ -36,13 +38,20 @@ class GenreSelectedFragment : Fragment() {
 
         binding.genreSelectedList.apply {
             setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            layoutManager = LinearLayoutManager(context)
         }
         binding.genreSelectedList.adapter = genreSelectedListAdapter
 
+        setListToAdapters()
         return binding.root
     }
 
+    private fun setListToAdapters(){
+        genreViewModel.popularInWeek.value = PlaylistAdapter()
+
+        genreViewModel.genrePlaylists.value = PlaylistAdapter()
+
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -52,7 +61,10 @@ class GenreSelectedFragment : Fragment() {
         })
 
         playlistViewModel.playlists.observe(viewLifecycleOwner, {
+            Timber.i("Playlist Change")
             genreViewModel.popularInWeek.value?.addPlaylists(it)
+            genreViewModel.genrePlaylists.value?.addPlaylists(it)
+            binding.executePendingBindings()
         })
     }
 }

@@ -22,13 +22,14 @@ class GenreViewModel(application: Application) : AndroidViewModel(application) {
     val selected = MutableLiveData<Genre>()
 
     var genreListAdapter = GenreListAdapter(GenreListener { genre ->
-        selected.value = genre
+        selectGenre(genre)
     }, R.id.action_musicFragment_to_genreSelectedFragment)
 
     // Set genres
     val genres = genreRepository.genres
 
     val popularInWeek = MutableLiveData<PlaylistAdapter>()
+    val genrePlaylists = MutableLiveData<PlaylistAdapter>()
 
     init {
         initGenre()
@@ -45,15 +46,13 @@ class GenreViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun getCategoriesForGenreSelected(): List<GenreChild> {
-        Timber.i("get children cat")
-
         return listOf(
-            GenreChild("Popular in these weeks", popularInWeek.value)
+            GenreChild("Popular in these weeks", popularInWeek.value),
+                GenreChild("Playlists", genrePlaylists.value)
         )
     }
 
     private fun selectGenre(item: Genre){
-        Timber.i(item.toString())
         selected.value = item
     }
 }
@@ -63,7 +62,7 @@ class GenreViewModelFactory(val application: Application): ViewModelProvider.Fac
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if(modelClass.isAssignableFrom(GenreViewModel::class.java)) return GenreViewModel(application) as T
 
-        throw IllegalArgumentException("Unknown Viewmodel Class")
+        throw IllegalArgumentException("Unknown ViewModel Class")
     }
 
 }
