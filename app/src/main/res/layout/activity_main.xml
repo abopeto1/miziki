@@ -23,7 +23,18 @@
             app:layout_constraintTop_toTopOf="parent"
             app:navGraph="@navigation/navigation"
             tools:ignore="FragmentTagUsage" />
-
+        <com.google.android.exoplayer2.ui.PlayerView
+            app:use_controller="false"
+            android:id="@+id/min_player"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/nav_host_fragment"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
+            app:fastforward_increment="30000"
+            app:rewind_increment="30000"
+            />
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottom_navigation"
             android:layout_width="match_parent"
