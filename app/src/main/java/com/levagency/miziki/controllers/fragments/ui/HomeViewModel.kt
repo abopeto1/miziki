@@ -9,6 +9,7 @@ import com.levagency.miziki.domain.album.adapter.AlbumAdapter
 import com.levagency.miziki.domain.album.listener.AlbumListener
 import com.levagency.miziki.domain.album.repository.AlbumDataRepository
 import com.levagency.miziki.domain.genre.adapter.GenreListAdapter
+import com.levagency.miziki.domain.playlist.adapter.PlaylistAdapter
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.IOException
@@ -37,6 +38,7 @@ class HomeViewModel(lifecycle: Lifecycle, application: Application) : ViewModel(
     val makeMondayMoreProductive = MutableLiveData<AlbumAdapter>()
 
     val browser = MutableLiveData<GenreListAdapter>()
+    val playlistPicks = MutableLiveData<PlaylistAdapter>()
 
     init {
         lifecycle.addObserver(this)
@@ -48,24 +50,28 @@ class HomeViewModel(lifecycle: Lifecycle, application: Application) : ViewModel(
 
         // Init Recent Played
         initRecentPlayed()
-        categories.value?.add(RECENT_PLAYED, HomeCategory("Recently Played", recentlyPlayed.value,))
+        categories.value?.add(RECENT_PLAYED, HomeCategory("Recently Played", recentlyPlayed.value))
 
         // Init Make Monday more productive
         categories.value?.add(MAKE_MONDAY_MORE_PRODUCTIVE, HomeCategory(
             "Make Monday More Productive",
-            makeMondayMoreProductive.value,
+            makeMondayMoreProductive.value
         ))
 
         // Init Browser
         categories.value?.add(
             BROWSE,
-            HomeCategory("Browse", browser.value, "Explore by genre and mood", R.id.action_musicFragment_to_genreFragment)
+            HomeCategory(
+                "Browse",
+                browser.value,
+                "Explore by genre and mood", R.id.action_musicFragment_to_genreFragment)
         )
 
         // Init Playlist Picks
         categories.value?.add(PLAYLIST_PICKS, HomeCategory(
             "Playlist Picks",
-            makeMondayMoreProductive.value,
+            playlistPicks.value,
+            "Selected for you based on your recent activity"
         ))
 
         // Init Podcasts

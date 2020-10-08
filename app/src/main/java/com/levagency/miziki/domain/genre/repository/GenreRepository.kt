@@ -3,7 +3,6 @@ package com.levagency.miziki.domain.genre.repository
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.levagency.miziki.database.database.MizikiDatabase
-import com.levagency.miziki.domain.genre.entity.DatabaseGenre
 import com.levagency.miziki.domain.genre.entity.Genre
 import com.levagency.miziki.domain.genre.entity.asDatabaseModel
 import com.levagency.miziki.domain.genre.entity.asDomainModel

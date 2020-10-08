@@ -27,7 +27,7 @@ class PlaylistRepository(
     }
 }
 
-private fun List<NetworkPlaylist>.asDatabaseModel(): List<DatabasePlaylist> {
+fun List<NetworkPlaylist>.asDatabaseModel(): List<DatabasePlaylist> {
     return map {
         DatabasePlaylist(
             id = it.id,

@@ -3,6 +3,7 @@ package com.levagency.miziki.domain.playlist.view_model
 import android.app.Application
 import androidx.lifecycle.*
 import com.levagency.miziki.database.database.getDatabase
+import com.levagency.miziki.domain.playlist.adapter.PlaylistAdapter
 import com.levagency.miziki.domain.playlist.repository.PlaylistRepository
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -14,6 +15,9 @@ class PlaylistViewModel(application: Application) : AndroidViewModel(application
 
     // Set genres
     val playlists = playlistRepository.playlists
+
+    // list adapter
+    var listAdapter = PlaylistAdapter()
 
     init {
         initPlaylists()

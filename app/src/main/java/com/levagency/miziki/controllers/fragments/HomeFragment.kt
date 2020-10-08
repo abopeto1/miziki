@@ -20,12 +20,14 @@ import com.levagency.miziki.domain.album.listener.AlbumListener
 import com.levagency.miziki.controllers.fragments.ui.*
 import com.levagency.miziki.databinding.FragmentHomeBinding
 import com.levagency.miziki.domain.genre.view_model.GenreViewModel
+import com.levagency.miziki.domain.playlist.view_model.PlaylistViewModel
 import timber.log.Timber
 
 class HomeFragment : Fragment() {
     private lateinit var homeViewModel: HomeViewModel
     private lateinit var viewModelFactory: HomeViewModelFactory
     private val genreViewModel: GenreViewModel by activityViewModels()
+    private val playlistViewModel: PlaylistViewModel by activityViewModels()
     private lateinit var binding: FragmentHomeBinding
 
     override fun onCreateView(
@@ -73,6 +75,14 @@ class HomeFragment : Fragment() {
 
         homeViewModel.browser.value = genreViewModel.genreListAdapter
         genreViewModel.genres.value?.let { homeViewModel.browser.value?.addGenres(it) }
+
+        // set playlist picks adapter
+        homeViewModel.playlistPicks.value = playlistViewModel.listAdapter
+        playlistViewModel.playlists.value.let {
+            if (it != null) {
+                homeViewModel.playlistPicks.value?.addPlaylists(it)
+            }
+        }
     }
 
     private fun initObservers(){
@@ -84,6 +94,10 @@ class HomeFragment : Fragment() {
 
         genreViewModel.genres.observe(viewLifecycleOwner, {
             homeViewModel.browser.value?.addGenres(it)
+        })
+
+        playlistViewModel.playlists.observe(viewLifecycleOwner, {
+            homeViewModel.playlistPicks.value?.addPlaylists(it)
         })
     }
     private fun initMakeMondayMoreProductive(binding: FragmentHomeBinding, application: Application){
