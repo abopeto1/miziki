@@ -21,6 +21,7 @@ import com.levagency.miziki.controllers.fragments.ui.*
 import com.levagency.miziki.databinding.FragmentHomeBinding
 import com.levagency.miziki.domain.genre.view_model.GenreViewModel
 import com.levagency.miziki.domain.playlist.view_model.PlaylistViewModel
+import com.levagency.miziki.domain.podcast.view_model.PodcastViewModel
 import timber.log.Timber
 
 class HomeFragment : Fragment() {
@@ -28,6 +29,8 @@ class HomeFragment : Fragment() {
     private lateinit var viewModelFactory: HomeViewModelFactory
     private val genreViewModel: GenreViewModel by activityViewModels()
     private val playlistViewModel: PlaylistViewModel by activityViewModels()
+    private val podcastViewModel: PodcastViewModel by activityViewModels()
+
     private lateinit var binding: FragmentHomeBinding
 
     override fun onCreateView(
@@ -81,6 +84,14 @@ class HomeFragment : Fragment() {
         playlistViewModel.playlists.value.let {
             if (it != null) {
                 homeViewModel.playlistPicks.value?.addPlaylists(it)
+            }
+        }
+
+        // set podcasts adapter
+        homeViewModel.podcasts.value = podcastViewModel.listAdapter
+        podcastViewModel.podcasts.value.let {
+            if (it != null) {
+                homeViewModel.podcasts.value?.addPodcasts(it)
             }
         }
     }

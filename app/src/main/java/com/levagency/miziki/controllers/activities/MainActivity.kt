@@ -15,11 +15,14 @@ import com.levagency.miziki.domain.genre.view_model.GenreViewModel
 import com.levagency.miziki.domain.genre.view_model.GenreViewModelFactory
 import com.levagency.miziki.domain.playlist.view_model.PlaylistViewModel
 import com.levagency.miziki.domain.playlist.view_model.PlaylistViewModelFactory
+import com.levagency.miziki.domain.podcast.view_model.PodcastViewModel
+import com.levagency.miziki.domain.podcast.view_model.PodcastViewModelFactory
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var genreViewModel: GenreViewModel
     private lateinit var playlistViewModel: PlaylistViewModel
+    private lateinit var podcastViewModel: PodcastViewModel
 
     // Player Variables
     private var player: SimpleExoPlayer? = null
@@ -47,6 +50,8 @@ class MainActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         initGenreViewModel()
         initPlaylistViewModel()
+        initViewModels()
+
         configureBottomMenu()
     }
 
@@ -104,5 +109,12 @@ class MainActivity : AppCompatActivity() {
         val playlistViewModelFactory = PlaylistViewModelFactory(this.application)
 
         playlistViewModel = ViewModelProvider(this, playlistViewModelFactory).get(PlaylistViewModel::class.java)
+    }
+
+    fun initViewModels() {
+        // Podcasts
+        val podcastViewModelFactory = PodcastViewModelFactory(this.application)
+
+        podcastViewModel = ViewModelProvider(this, podcastViewModelFactory).get(PodcastViewModel::class.java)
     }
 }

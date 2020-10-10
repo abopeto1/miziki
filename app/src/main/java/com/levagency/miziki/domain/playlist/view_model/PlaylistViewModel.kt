@@ -13,7 +13,7 @@ import java.lang.IllegalArgumentException
 class PlaylistViewModel(application: Application) : AndroidViewModel(application) {
     private val playlistRepository = PlaylistRepository(getDatabase(application))
 
-    // Set genres
+    // Set Playlists
     val playlists = playlistRepository.playlists
 
     // list adapter

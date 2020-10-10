@@ -10,6 +10,7 @@ import com.levagency.miziki.domain.album.listener.AlbumListener
 import com.levagency.miziki.domain.album.repository.AlbumDataRepository
 import com.levagency.miziki.domain.genre.adapter.GenreListAdapter
 import com.levagency.miziki.domain.playlist.adapter.PlaylistAdapter
+import com.levagency.miziki.domain.podcast.adapter.PodcastAdapter
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.IOException
@@ -39,6 +40,7 @@ class HomeViewModel(lifecycle: Lifecycle, application: Application) : ViewModel(
 
     val browser = MutableLiveData<GenreListAdapter>()
     val playlistPicks = MutableLiveData<PlaylistAdapter>()
+    val podcasts = MutableLiveData<PodcastAdapter>()
 
     init {
         lifecycle.addObserver(this)
@@ -75,7 +77,10 @@ class HomeViewModel(lifecycle: Lifecycle, application: Application) : ViewModel(
         ))
 
         // Init Podcasts
-        categories.value?.add(PODCASTS, HomeCategory("Podcasts", makeMondayMoreProductive.value,))
+        categories.value?.add(PODCASTS, HomeCategory(
+            "Podcasts",
+            podcasts.value,
+            "Explore by categories and popularity"))
 
         // Init New Releases For You
         categories.value?.add(NEW_RELEASES, HomeCategory(

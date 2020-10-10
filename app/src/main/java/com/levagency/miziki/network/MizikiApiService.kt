@@ -37,4 +37,5 @@ object MizikiApi{
 
     val mizikiNetwork: MizikiApiService = retrofit.create(MizikiApiService::class.java)
     val playlistApiService: PlaylistApiService = retrofit.create(PlaylistApiService::class.java)
+    val podcastApiService: PodcastApiService = retrofit.create(PodcastApiService::class.java)
 }
