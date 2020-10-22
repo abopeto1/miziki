@@ -5,4 +5,5 @@
     <color name="colorAccent">#03DAC5</color>
     <color name="subtitle">#99999F</color>
     <color name="background">#161A1A</color>
+    <color name="menuBackground">#303033</color>
 </resources>
