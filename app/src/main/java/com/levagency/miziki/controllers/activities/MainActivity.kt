@@ -11,6 +11,8 @@ import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.util.Util
 import com.levagency.miziki.R
 import com.levagency.miziki.databinding.ActivityMainBinding
+import com.levagency.miziki.domain.album.factory.AlbumViewModelFactory
+import com.levagency.miziki.domain.album.viewmodel.AlbumViewModel
 import com.levagency.miziki.domain.genre.view_model.GenreViewModel
 import com.levagency.miziki.domain.genre.view_model.GenreViewModelFactory
 import com.levagency.miziki.domain.playlist.view_model.PlaylistViewModel
@@ -24,6 +26,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var genreViewModel: GenreViewModel
     private lateinit var playlistViewModel: PlaylistViewModel
     private lateinit var podcastViewModel: PodcastViewModel
+    private lateinit var albumViewModel: AlbumViewModel
 
     // Player Variables
     private var player: SimpleExoPlayer? = null
@@ -49,10 +52,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-//        initGenreViewModel()
-        initPlaylistViewModel()
-        Timber.i("Playlists VM Initialized")
-//        initViewModels()
+        initViewModels()
 
         configureBottomMenu()
     }
@@ -101,6 +101,11 @@ class MainActivity : AppCompatActivity() {
         NavigationUI.setupWithNavController(binding.bottomNavigation, findNavController(R.id.nav_host_fragment))
     }
 
+    private fun initViewModels(){
+        initPlaylistViewModel()
+        initAlbumViewModel() // Initialize Album View Model
+    }
+
     private fun initGenreViewModel() {
         val genreViewModelFactory = GenreViewModelFactory(this.application)
 
@@ -113,10 +118,17 @@ class MainActivity : AppCompatActivity() {
         playlistViewModel = ViewModelProvider(this, playlistViewModelFactory).get(PlaylistViewModel::class.java)
     }
 
-    fun initViewModels() {
+    private fun initPodcastViewModel() {
         // Podcasts
         val podcastViewModelFactory = PodcastViewModelFactory(this.application)
 
         podcastViewModel = ViewModelProvider(this, podcastViewModelFactory).get(PodcastViewModel::class.java)
+    }
+
+    // Initialize Album View Model
+    private fun initAlbumViewModel() {
+        val albumViewModelFactory = AlbumViewModelFactory(this.application)
+
+        albumViewModel = ViewModelProvider(this, albumViewModelFactory).get(AlbumViewModel::class.java)
     }
 }

@@ -24,7 +24,7 @@ class PlaylistRepository(
     suspend fun refreshPlaylist() {
         withContext(Dispatchers.IO){
             val result = MizikiApi.playlistApiService.getPlaylists()
-            Timber.i(result.toString())
+
 //            database.playlistDao.insertAll(result.data.asDatabaseModel())
         }
     }

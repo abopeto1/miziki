@@ -5,6 +5,7 @@ import androidx.lifecycle.*
 import com.levagency.miziki.database.database.getDatabase
 import com.levagency.miziki.domain.album.repository.AlbumDataRepository
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.io.IOException
 
 enum class AlbumApiStatus { LOADING, ERROR, DONE }
@@ -22,6 +23,7 @@ class AlbumViewModel(application: Application) : AndroidViewModel(application) {
 //        get() = _status
 
     val albums = albumRepository.localAlbums
+    val albumsOther = albumRepository.albums
 
 //    private lateinit var album: LiveData<DatabaseAlbum?>
 //    var albums = albumDataRepository.getAllAlbum()
@@ -45,6 +47,7 @@ class AlbumViewModel(application: Application) : AndroidViewModel(application) {
     private fun refreshAlbumsFromRepository() =
             viewModelScope.launch {
                 try {
+                    Timber.i("refresh albums")
                     albumRepository.refreshAlbums()
                     _status.value = AlbumApiStatus.DONE
                 } catch (e: IOException) {

@@ -29,6 +29,7 @@ class HomeFragment : Fragment() {
     private lateinit var viewModelFactory: HomeViewModelFactory
 //    private val genreViewModel: GenreViewModel by activityViewModels()
     private val playlistViewModel: PlaylistViewModel by activityViewModels()
+    private val albumViewModel: AlbumViewModel by activityViewModels()
 //    private val podcastViewModel: PodcastViewModel by activityViewModels()
 
     private lateinit var binding: FragmentHomeBinding
@@ -44,7 +45,7 @@ class HomeFragment : Fragment() {
             // Initialize Categories
             initHomeCategories()
         }
-
+        Timber.i("Start HomeFragment")
         binding.lifecycleOwner = this
         // Get Application
         val application = requireNotNull(this.activity).application

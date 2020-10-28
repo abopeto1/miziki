@@ -5,6 +5,7 @@ import okio.Timeout
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import timber.log.Timber
 import java.io.IOException
 
 sealed class Result<out T> {
@@ -30,8 +31,6 @@ abstract class CallDelegate<TIn, TOut>(protected val proxy: Call<TIn>): Call<TOu
 
     override fun isCanceled(): Boolean = proxy.isCanceled
 
-    override fun timeout(): Timeout = proxy.timeout()
-
     abstract fun enqueueImpl(callback: Callback<TOut>)
 
     abstract fun cloneImpl(): Call<TOut>
@@ -41,6 +40,8 @@ class ResultCall<T>(proxy: Call<T>): CallDelegate<T, Result<T>>(proxy){
     override fun enqueueImpl(callback: Callback<Result<T>>) {
         proxy.enqueue(object: Callback<T>{
             override fun onResponse(call: Call<T>, response: Response<T>) {
+                Timber.i(response.body().toString())
+                
                 val code = response.code()
                 val result = if(code in 200 until 300) {
                     val body = response.body()
@@ -54,6 +55,7 @@ class ResultCall<T>(proxy: Call<T>): CallDelegate<T, Result<T>>(proxy){
             }
 
             override fun onFailure(call: Call<T>, t: Throwable) {
+                Timber.i(t)
                 val result = if(t is IOException) {
                     Result.NetworkError
                 } else {
@@ -67,4 +69,13 @@ class ResultCall<T>(proxy: Call<T>): CallDelegate<T, Result<T>>(proxy){
     }
 
     override fun cloneImpl(): Call<Result<T>> = ResultCall(proxy.clone())
+
+    /**
+     * Returns a timeout that spans the entire call: resolving DNS, connecting, writing the request
+     * body, server processing, and reading the response body. If the call requires redirects or
+     * retries all must complete within one timeout period.
+     */
+    override fun timeout(): Timeout {
+        TODO("Not yet implemented")
+    }
 }
