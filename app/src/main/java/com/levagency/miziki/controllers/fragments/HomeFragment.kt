@@ -27,9 +27,9 @@ import timber.log.Timber
 class HomeFragment : Fragment() {
     private lateinit var homeViewModel: HomeViewModel
     private lateinit var viewModelFactory: HomeViewModelFactory
-    private val genreViewModel: GenreViewModel by activityViewModels()
+//    private val genreViewModel: GenreViewModel by activityViewModels()
     private val playlistViewModel: PlaylistViewModel by activityViewModels()
-    private val podcastViewModel: PodcastViewModel by activityViewModels()
+//    private val podcastViewModel: PodcastViewModel by activityViewModels()
 
     private lateinit var binding: FragmentHomeBinding
 
@@ -48,10 +48,10 @@ class HomeFragment : Fragment() {
         binding.lifecycleOwner = this
         // Get Application
         val application = requireNotNull(this.activity).application
-        Timber.i(genreViewModel.toString())
+//        Timber.i(genreViewModel.toString())
         // Initialize Recent Played
 //        initRecentPlayed(binding, application)
-        initMakeMondayMoreProductive(binding, application)
+//        initMakeMondayMoreProductive(binding, application)
         initObservers()
         return binding.root
     }
@@ -76,8 +76,8 @@ class HomeFragment : Fragment() {
             binding.homeViewModel?.recentlyPlayed?.value?.addHeaderAndSubmitList(it)
         })
 
-        homeViewModel.browser.value = genreViewModel.genreListAdapter
-        genreViewModel.genres.value?.let { homeViewModel.browser.value?.addGenres(it) }
+//        homeViewModel.browser.value = genreViewModel.genreListAdapter
+//        genreViewModel.genres.value?.let { homeViewModel.browser.value?.addGenres(it) }
 
         // set playlist picks adapter
         homeViewModel.playlistPicks.value = playlistViewModel.listAdapter
@@ -87,13 +87,13 @@ class HomeFragment : Fragment() {
             }
         }
 
-        // set podcasts adapter
-        homeViewModel.podcasts.value = podcastViewModel.listAdapter
-        podcastViewModel.podcasts.value.let {
-            if (it != null) {
-                homeViewModel.podcasts.value?.addPodcasts(it)
-            }
-        }
+//        // set podcasts adapter
+//        homeViewModel.podcasts.value = podcastViewModel.listAdapter
+//        podcastViewModel.podcasts.value.let {
+//            if (it != null) {
+//                homeViewModel.podcasts.value?.addPodcasts(it)
+//            }
+//        }
     }
 
     private fun initObservers(){
@@ -103,49 +103,49 @@ class HomeFragment : Fragment() {
             }
         })
 
-        genreViewModel.genres.observe(viewLifecycleOwner, {
-            homeViewModel.browser.value?.addGenres(it)
-        })
+//        genreViewModel.genres.observe(viewLifecycleOwner, {
+//            homeViewModel.browser.value?.addGenres(it)
+//        })
 
         playlistViewModel.playlists.observe(viewLifecycleOwner, {
             homeViewModel.playlistPicks.value?.addPlaylists(it)
         })
     }
-    private fun initMakeMondayMoreProductive(binding: FragmentHomeBinding, application: Application){
-        // Create an instance of the ViewModel Factory
-//        val dataSource = MizikiDatabase.getInstance(application).albumDatabaseDao
-//        val albumDataRepository = AlbumDataRepository(dataSource)
-        val viewModelFactory = AlbumViewModelFactory(application)
-
-        // Get a reference to the ViewModel associated with this fragment
-        val albumViewModel = ViewModelProvider(this, viewModelFactory).get(AlbumViewModel::class.java)
-
-        binding.albumViewModel = albumViewModel
-
-        val albumAdapter = AlbumAdapter(AlbumListener { albumId ->
-            Toast.makeText(context, "$albumId", Toast.LENGTH_LONG).show()
-            albumViewModel.onAlbumTileClicked(albumId)
-        })
-
-        homeViewModel.makeMondayMoreProductive.value = albumAdapter
-
-        albumViewModel.navigateToAlbumDetail.observe(viewLifecycleOwner, { albumId ->
-            albumId?.let {
-                this.findNavController().navigate(
-                    HomeFragmentDirections.actionMusicFragmentToFavoritesFragment()
-                )
-                albumViewModel.onAlbumTileNavigated()
-            }
-        })
-
-        albumViewModel.albums.observe(viewLifecycleOwner, {
-            it.let {
-                albumAdapter.addHeaderAndSubmitList(it)
-                binding.executePendingBindings()
-            }
-        })
-    }
-
+//    private fun initMakeMondayMoreProductive(binding: FragmentHomeBinding, application: Application){
+//        // Create an instance of the ViewModel Factory
+////        val dataSource = MizikiDatabase.getInstance(application).albumDatabaseDao
+////        val albumDataRepository = AlbumDataRepository(dataSource)
+//        val viewModelFactory = AlbumViewModelFactory(application)
+//
+//        // Get a reference to the ViewModel associated with this fragment
+//        val albumViewModel = ViewModelProvider(this, viewModelFactory).get(AlbumViewModel::class.java)
+//
+//        binding.albumViewModel = albumViewModel
+//
+//        val albumAdapter = AlbumAdapter(AlbumListener { albumId ->
+//            Toast.makeText(context, "$albumId", Toast.LENGTH_LONG).show()
+//            albumViewModel.onAlbumTileClicked(albumId)
+//        })
+//
+//        homeViewModel.makeMondayMoreProductive.value = albumAdapter
+//
+//        albumViewModel.navigateToAlbumDetail.observe(viewLifecycleOwner, { albumId ->
+//            albumId?.let {
+//                this.findNavController().navigate(
+//                    HomeFragmentDirections.actionMusicFragmentToFavoritesFragment()
+//                )
+//                albumViewModel.onAlbumTileNavigated()
+//            }
+//        })
+//
+//        albumViewModel.albums.observe(viewLifecycleOwner, {
+//            it.let {
+//                albumAdapter.addHeaderAndSubmitList(it)
+//                binding.executePendingBindings()
+//            }
+//        })
+//    }
+//
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 

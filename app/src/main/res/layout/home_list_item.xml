@@ -27,18 +27,6 @@
             tools:text="Section Title" />
 
         <TextView
-            android:id="@+id/description"
-            style="@style/sub_title"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title"
-            android:text="@{homeCategory.description}"
-            tools:text="Explore by genre and mood" />
-
-        <TextView
             android:id="@+id/view_all_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -58,11 +46,11 @@
             android:id="@+id/home_item_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/description"
+            app:layout_constraintTop_toBottomOf="@+id/title"
             tools:ignore="RtlSymmetry"
             tools:layout_marginTop="24dp"
             tools:listitem="@layout/playlist_tile_item_view" />

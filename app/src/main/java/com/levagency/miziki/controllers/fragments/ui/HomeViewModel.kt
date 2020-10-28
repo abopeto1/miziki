@@ -48,6 +48,8 @@ class HomeViewModel(lifecycle: Lifecycle, application: Application) : ViewModel(
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     private fun initializeCategories() {
+        _showLoadingProgressBar.value = true
+
         categories.value = ArrayList()
 
         // Init Recent Played

@@ -17,6 +17,7 @@ import com.levagency.miziki.domain.playlist.view_model.PlaylistViewModel
 import com.levagency.miziki.domain.playlist.view_model.PlaylistViewModelFactory
 import com.levagency.miziki.domain.podcast.view_model.PodcastViewModel
 import com.levagency.miziki.domain.podcast.view_model.PodcastViewModelFactory
+import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -48,9 +49,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-        initGenreViewModel()
+//        initGenreViewModel()
         initPlaylistViewModel()
-        initViewModels()
+        Timber.i("Playlists VM Initialized")
+//        initViewModels()
 
         configureBottomMenu()
     }

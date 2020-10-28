@@ -10,6 +10,9 @@ import com.levagency.miziki.domain.playlist.entity.asDomainModel
 import com.levagency.miziki.network.MizikiApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import retrofit2.HttpException
+import timber.log.Timber
+import java.io.IOException
 
 class PlaylistRepository(
     private val database: MizikiDatabase
@@ -20,13 +23,16 @@ class PlaylistRepository(
 
     suspend fun refreshPlaylist() {
         withContext(Dispatchers.IO){
-            val networkPlaylist = MizikiApi.playlistApiService.getPlaylists()
-
-            database.playlistDao.insertAll(networkPlaylist.asDatabaseModel())
+            val result = MizikiApi.playlistApiService.getPlaylists()
+            Timber.i(result.toString())
+//            database.playlistDao.insertAll(result.data.asDatabaseModel())
         }
     }
 }
 
+fun convertErrorBody(throwable: HttpException){
+
+}
 fun List<NetworkPlaylist>.asDatabaseModel(): List<DatabasePlaylist> {
     return map {
         DatabasePlaylist(

@@ -5,5 +5,5 @@ import retrofit2.http.GET
 
 interface PlaylistApiService {
     @GET("playlists")
-    suspend fun getPlaylists(): List<NetworkPlaylist>
+    suspend fun getPlaylists(): Result<List<NetworkPlaylist>>
 }

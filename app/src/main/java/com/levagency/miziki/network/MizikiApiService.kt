@@ -9,7 +9,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
 
-private const val BASE_URL = "https://my-json-server.typicode.com/abopeto1/mizikidb/"
+private const val BASE_URL = "http://ec2-3-130-234-231.us-east-2.compute.amazonaws.com/miziki_api/public/api/"
 
 private val moshi = Moshi.Builder()
     .add(KotlinJsonAdapterFactory())
@@ -32,6 +32,7 @@ interface MizikiApiService {
 object MizikiApi{
     private val retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
+        .addCallAdapterFactory(CallAdapterFactory())
         .addConverterFactory(MoshiConverterFactory.create(moshi))
         .build()
 

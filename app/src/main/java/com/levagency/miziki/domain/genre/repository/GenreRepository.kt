@@ -9,6 +9,9 @@ import com.levagency.miziki.domain.genre.entity.asDomainModel
 import com.levagency.miziki.network.MizikiApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import retrofit2.HttpException
+import timber.log.Timber
+import java.io.IOException
 
 class GenreRepository(
     val database: MizikiDatabase
