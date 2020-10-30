@@ -40,8 +40,6 @@ class ResultCall<T>(proxy: Call<T>): CallDelegate<T, Result<T>>(proxy){
     override fun enqueueImpl(callback: Callback<Result<T>>) {
         proxy.enqueue(object: Callback<T>{
             override fun onResponse(call: Call<T>, response: Response<T>) {
-                Timber.i(response.body().toString())
-                
                 val code = response.code()
                 val result = if(code in 200 until 300) {
                     val body = response.body()

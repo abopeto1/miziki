@@ -6,6 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.levagency.miziki.database.dao.AlbumDatabaseDao
 import com.levagency.miziki.database.dao.PersonDatabaseDao
+import com.levagency.miziki.database.dao.RecentPlayedDao
 import com.levagency.miziki.domain.album.entity.DatabaseAlbum
 import com.levagency.miziki.domain.genre.entity.DatabaseGenre
 import com.levagency.miziki.domain.genre.entity.GenreDatabaseDao
@@ -14,6 +15,7 @@ import com.levagency.miziki.domain.playlist.entity.DatabasePlaylist
 import com.levagency.miziki.domain.playlist.entity.PlaylistDao
 import com.levagency.miziki.domain.podcast.entity.DatabasePodcast
 import com.levagency.miziki.domain.podcast.entity.PodcastDao
+import com.levagency.miziki.domain.recent_played.entity.DatabaseRecentPlayed
 
 private lateinit var INSTANCE: MizikiDatabase
 
@@ -32,17 +34,19 @@ fun getDatabase(context: Context): MizikiDatabase {
 @Database(
     entities = [
         DatabaseAlbum::class,
-        DatabasePerson::class,
         DatabaseGenre::class,
+        DatabasePerson::class,
         DatabasePlaylist::class,
-        DatabasePodcast::class
+        DatabasePodcast::class,
+        DatabaseRecentPlayed::class,
     ], version = 1,
     exportSchema = false
 )
 abstract class MizikiDatabase : RoomDatabase() {
     abstract val albumDao: AlbumDatabaseDao
-    abstract val personDao: PersonDatabaseDao
     abstract val genreDao: GenreDatabaseDao
+    abstract val personDao: PersonDatabaseDao
     abstract val playlistDao: PlaylistDao
     abstract val podcastDao: PodcastDao
+    abstract val recentPlayedDao: RecentPlayedDao
 }

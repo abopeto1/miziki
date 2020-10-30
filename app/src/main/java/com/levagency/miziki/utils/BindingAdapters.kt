@@ -5,6 +5,8 @@ import android.widget.ImageView
 import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterInside
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.levagency.miziki.R
 import com.levagency.miziki.domain.album.viewmodel.AlbumApiStatus
@@ -17,7 +19,8 @@ fun bindImage(imageView: ImageView, url: String?){
             .load(imgUri)
             .apply(RequestOptions()
                 .placeholder(R.drawable.loading_animation)
-                .centerCrop()
+//                .centerCrop()
+                .transform(CenterInside(), RoundedCorners(10))
                 .error(R.drawable.ic_broken_image))
             .into(imageView)
     }

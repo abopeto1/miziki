@@ -12,7 +12,7 @@ data class DatabaseAlbum constructor(
     val id: Long,
     var name: String,
     var image: String,
-    var byArtist: Long
+    var byArtist: String
 )
 
 /**

@@ -19,14 +19,16 @@ import com.levagency.miziki.domain.playlist.view_model.PlaylistViewModel
 import com.levagency.miziki.domain.playlist.view_model.PlaylistViewModelFactory
 import com.levagency.miziki.domain.podcast.view_model.PodcastViewModel
 import com.levagency.miziki.domain.podcast.view_model.PodcastViewModelFactory
-import timber.log.Timber
+import com.levagency.miziki.domain.recent_played.view_model.RecentPlayedViewModel
+import com.levagency.miziki.domain.recent_played.view_model.RecentPlayedViewModelFactory
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private lateinit var albumViewModel: AlbumViewModel
     private lateinit var genreViewModel: GenreViewModel
     private lateinit var playlistViewModel: PlaylistViewModel
     private lateinit var podcastViewModel: PodcastViewModel
-    private lateinit var albumViewModel: AlbumViewModel
+    private lateinit var recentPlayedViewModel: RecentPlayedViewModel // Set recent played view model
 
     // Player Variables
     private var player: SimpleExoPlayer? = null
@@ -52,6 +54,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+
+        // Initialize all view models
         initViewModels()
 
         configureBottomMenu()
@@ -102,8 +106,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initViewModels(){
-        initPlaylistViewModel()
+//        initPlaylistViewModel()
         initAlbumViewModel() // Initialize Album View Model
+        initRecentPlayedViewModel() // Initialize Recent Played View Model
     }
 
     private fun initGenreViewModel() {
@@ -130,5 +135,12 @@ class MainActivity : AppCompatActivity() {
         val albumViewModelFactory = AlbumViewModelFactory(this.application)
 
         albumViewModel = ViewModelProvider(this, albumViewModelFactory).get(AlbumViewModel::class.java)
+    }
+
+    // Initialize Recent Played View Model
+    private fun initRecentPlayedViewModel() {
+        val recentPlaylistViewModelFactory = RecentPlayedViewModelFactory(this.application)
+
+        recentPlayedViewModel = ViewModelProvider(this, recentPlaylistViewModelFactory).get(RecentPlayedViewModel::class.java)
     }
 }

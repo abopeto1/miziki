@@ -28,7 +28,7 @@ class HomeFragment : Fragment() {
     private lateinit var homeViewModel: HomeViewModel
     private lateinit var viewModelFactory: HomeViewModelFactory
 //    private val genreViewModel: GenreViewModel by activityViewModels()
-    private val playlistViewModel: PlaylistViewModel by activityViewModels()
+//    private val playlistViewModel: PlaylistViewModel by activityViewModels()
     private val albumViewModel: AlbumViewModel by activityViewModels()
 //    private val podcastViewModel: PodcastViewModel by activityViewModels()
 
@@ -81,12 +81,12 @@ class HomeFragment : Fragment() {
 //        genreViewModel.genres.value?.let { homeViewModel.browser.value?.addGenres(it) }
 
         // set playlist picks adapter
-        homeViewModel.playlistPicks.value = playlistViewModel.listAdapter
-        playlistViewModel.playlists.value.let {
-            if (it != null) {
-                homeViewModel.playlistPicks.value?.addPlaylists(it)
-            }
-        }
+//        homeViewModel.playlistPicks.value = playlistViewModel.listAdapter
+//        playlistViewModel.playlists.value.let {
+//            if (it != null) {
+//                homeViewModel.playlistPicks.value?.addPlaylists(it)
+//            }
+//        }
 
 //        // set podcasts adapter
 //        homeViewModel.podcasts.value = podcastViewModel.listAdapter
@@ -108,9 +108,9 @@ class HomeFragment : Fragment() {
 //            homeViewModel.browser.value?.addGenres(it)
 //        })
 
-        playlistViewModel.playlists.observe(viewLifecycleOwner, {
-            homeViewModel.playlistPicks.value?.addPlaylists(it)
-        })
+//        playlistViewModel.playlists.observe(viewLifecycleOwner, {
+//            homeViewModel.playlistPicks.value?.addPlaylists(it)
+//        })
     }
 //    private fun initMakeMondayMoreProductive(binding: FragmentHomeBinding, application: Application){
 //        // Create an instance of the ViewModel Factory
