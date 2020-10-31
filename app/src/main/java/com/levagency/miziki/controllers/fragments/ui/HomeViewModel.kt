@@ -4,13 +4,12 @@ import android.app.Application
 import androidx.lifecycle.*
 import androidx.navigation.Navigation
 import com.levagency.miziki.R
-import com.levagency.miziki.database.database.getDatabase
 import com.levagency.miziki.domain.album.adapter.AlbumAdapter
 import com.levagency.miziki.domain.album.listener.AlbumListener
-import com.levagency.miziki.domain.album.repository.AlbumDataRepository
 import com.levagency.miziki.domain.genre.adapter.GenreListAdapter
 import com.levagency.miziki.domain.playlist.adapter.PlaylistAdapter
 import com.levagency.miziki.domain.podcast.adapter.PodcastAdapter
+import com.levagency.miziki.domain.recent_played.adapter.RecentPlayedAdapter
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.IOException
@@ -25,8 +24,6 @@ const val RECOMMEND = 6
 const val POPULAR_ARTISTS = 7
 
 class HomeViewModel(lifecycle: Lifecycle, application: Application) : ViewModel(), LifecycleObserver {
-    private val albumRepository = AlbumDataRepository(getDatabase(application))
-
     val categories = MutableLiveData<MutableList<HomeCategory>>()
 
     // status for Loading
@@ -34,8 +31,7 @@ class HomeViewModel(lifecycle: Lifecycle, application: Application) : ViewModel(
     val showLoadingProgressBar: LiveData<Boolean>
         get() = _showLoadingProgressBar
 
-    val recentlyPlayed = MutableLiveData<AlbumAdapter>()
-    val recentlyPlayedData = albumRepository.localAlbums
+    val recentlyPlayed = MutableLiveData<RecentPlayedAdapter>()
     val makeMondayMoreProductive = MutableLiveData<AlbumAdapter>()
 
     val browser = MutableLiveData<GenreListAdapter>()
@@ -53,7 +49,6 @@ class HomeViewModel(lifecycle: Lifecycle, application: Application) : ViewModel(
         categories.value = ArrayList()
 
         // Init Recent Played
-        initRecentPlayed()
         categories.value?.add(RECENT_PLAYED, HomeCategory("Recently Played", recentlyPlayed.value))
 
         // Init Make Monday more productive
@@ -111,22 +106,20 @@ class HomeViewModel(lifecycle: Lifecycle, application: Application) : ViewModel(
         doneShowingLoadingProgressBar()
     }
 
-    private fun initRecentPlayed() =
-        viewModelScope.launch {
-            try {
-                val albumAdapter = AlbumAdapter(AlbumListener {
-//            Toast.makeText(context, "$albumId", Toast.LENGTH_LONG).show()
-//            albumViewModel.onAlbumTileClicked(albumId)
-                    Navigation.createNavigateOnClickListener(R.id.action_musicFragment_to_favoritesFragment, null)
-                })
-                recentlyPlayed.value = albumAdapter
-
-                albumRepository.refreshAlbums()
-                recentlyPlayedData.value?.let { recentlyPlayed.value?.addHeaderAndSubmitList(it) }
-            } catch (e: IOException){
-                Timber.i(e)
-            }
-        }
+//    private fun initRecentPlayed() =
+//        viewModelScope.launch {
+//            try {
+//                val albumAdapter = AlbumAdapter(AlbumListener {
+////            Toast.makeText(context, "$albumId", Toast.LENGTH_LONG).show()
+////            albumViewModel.onAlbumTileClicked(albumId)
+//                    Navigation.createNavigateOnClickListener(R.id.action_musicFragment_to_favoritesFragment, null)
+//                })
+//                recentlyPlayed.value = albumAdapter
+////                recentlyPlayedData.value?.let { recentlyPlayed.value?.addHeaderAndSubmitList(it) }
+//            } catch (e: IOException){
+//                Timber.i(e)
+//            }
+//        }
 //    fun onSetCategory(type: Int, adapter: RecyclerView.Adapter<RecyclerView.ViewHolder>){
 //        categories.value?.get(type)?.adapter = adapter
 //    }

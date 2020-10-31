@@ -15,7 +15,7 @@ import java.lang.IllegalArgumentException
 class RecentPlayedViewModel(application: Application): AndroidViewModel(application) {
     private fun getRecentPlayedRepository(application: Application) = RecentPlayedRepository(getDatabase(application))
 
-    fun getRecentPlayed() = getRecentPlayedRepository(getApplication()).recentPlayed
+    val recentPlayed = getRecentPlayedRepository(getApplication()).recentPlayed
 
     init {
         viewModelScope.launch {

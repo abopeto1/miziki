@@ -31,6 +31,7 @@ class HomeCategory(
     var adapter: RecyclerView.Adapter<RecyclerView.ViewHolder>? = null,
     var description: String? = null,
     var navigationAction: Int? = null,
+    var notFoundText: String = "Not Found"
 )
 
 class HomeAdapter : ListAdapter<HomeCategory, RecyclerView.ViewHolder>(HomeDiffCallback()) {
@@ -53,6 +54,7 @@ class HomeAdapter : ListAdapter<HomeCategory, RecyclerView.ViewHolder>(HomeDiffC
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                 adapter = item.adapter
             }
+            binding.listEmpty.text = item.notFoundText
 //            binding.homeItemList.adapter = item.adapter
             binding.executePendingBindings()
         }

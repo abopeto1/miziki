@@ -1,27 +1,20 @@
 package com.levagency.miziki.controllers.fragments
 
-import android.app.Application
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.levagency.miziki.R
-import com.levagency.miziki.domain.album.adapter.AlbumAdapter
 import com.levagency.miziki.domain.album.viewmodel.AlbumViewModel
-import com.levagency.miziki.domain.album.factory.AlbumViewModelFactory
-import com.levagency.miziki.domain.album.listener.AlbumListener
 import com.levagency.miziki.controllers.fragments.ui.*
 import com.levagency.miziki.databinding.FragmentHomeBinding
-import com.levagency.miziki.domain.genre.view_model.GenreViewModel
-import com.levagency.miziki.domain.playlist.view_model.PlaylistViewModel
-import com.levagency.miziki.domain.podcast.view_model.PodcastViewModel
+import com.levagency.miziki.domain.recent_played.view_model.RecentPlayedViewModel
+import kotlinx.android.synthetic.main.home_list_item.view.*
 import timber.log.Timber
 
 class HomeFragment : Fragment() {
@@ -30,6 +23,7 @@ class HomeFragment : Fragment() {
 //    private val genreViewModel: GenreViewModel by activityViewModels()
 //    private val playlistViewModel: PlaylistViewModel by activityViewModels()
     private val albumViewModel: AlbumViewModel by activityViewModels()
+    private val recentPlayedViewModel: RecentPlayedViewModel by activityViewModels()
 //    private val podcastViewModel: PodcastViewModel by activityViewModels()
 
     private lateinit var binding: FragmentHomeBinding
@@ -39,16 +33,15 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment if binding is not initialized
-        if(!this::binding.isInitialized){
-            binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
 
-            // Initialize Categories
-            initHomeCategories()
-        }
+        // Initialize Categories
+        initHomeCategories()
+
         Timber.i("Start HomeFragment")
         binding.lifecycleOwner = this
         // Get Application
-        val application = requireNotNull(this.activity).application
+//        val application = requireNotNull(this.activity).application
 //        Timber.i(genreViewModel.toString())
         // Initialize Recent Played
 //        initRecentPlayed(binding, application)
@@ -69,12 +62,9 @@ class HomeFragment : Fragment() {
             adapter = homeAdapter
         }
         homeViewModel.categories.value?.let { homeAdapter.addCategories(it) }
+
         homeViewModel.categories.observe(viewLifecycleOwner, { list ->
             homeAdapter.addCategories(list)
-        })
-
-        homeViewModel.recentlyPlayedData.observe(viewLifecycleOwner, {
-            binding.homeViewModel?.recentlyPlayed?.value?.addHeaderAndSubmitList(it)
         })
 
 //        homeViewModel.browser.value = genreViewModel.genreListAdapter
@@ -104,6 +94,13 @@ class HomeFragment : Fragment() {
             }
         })
 
+        recentPlayedViewModel.recentPlayed.observe(viewLifecycleOwner, {
+            if(it.isNotEmpty()){
+                Timber.i("it not empty")
+                binding.homeList.list_empty.visibility = View.GONE
+            }
+            homeViewModel.recentlyPlayed.value?.submit(it)
+        })
 //        genreViewModel.genres.observe(viewLifecycleOwner, {
 //            homeViewModel.browser.value?.addGenres(it)
 //        })

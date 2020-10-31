@@ -51,7 +51,6 @@ class AlbumAdapter(private val clickListener: AlbumListener) : ListAdapter<Album
             }
         }
     }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return ViewHolder.from(parent)
     }
