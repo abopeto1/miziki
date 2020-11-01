@@ -14,6 +14,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 class HomeDiffCallback : DiffUtil.ItemCallback<HomeCategory>(){
     override fun areItemsTheSame(oldItem: HomeCategory, newItem: HomeCategory): Boolean {
@@ -48,14 +49,20 @@ class HomeAdapter : ListAdapter<HomeCategory, RecyclerView.ViewHolder>(HomeDiffC
                     Navigation.createNavigateOnClickListener(item.navigationAction!!)
                 )
             }
+
             // set recycler view
             binding.homeItemList.apply {
                 setHasFixedSize(true)
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                 adapter = item.adapter
             }
+
             binding.listEmpty.text = item.notFoundText
-//            binding.homeItemList.adapter = item.adapter
+
+            if (item.adapter?.itemCount.toString() != "null"){
+                binding.listEmpty.visibility = View.GONE
+            }
+
             binding.executePendingBindings()
         }
 

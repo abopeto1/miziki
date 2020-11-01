@@ -8,6 +8,7 @@ import com.levagency.miziki.domain.podcast.entity.Podcast
 import com.levagency.miziki.domain.podcast.entity.asDatabaseModel
 import com.levagency.miziki.domain.podcast.entity.asDomainModel
 import com.levagency.miziki.network.MizikiApi
+import com.levagency.miziki.network.Result
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
@@ -23,9 +24,15 @@ class PodcastRepository(
 
     suspend fun refreshPodcasts(){
         withContext(Dispatchers.IO){
-            val networkPodcast = MizikiApi.podcastApiService.getPodcasts()
-
-            database.podcastDao.insertAll(networkPodcast.asDatabaseModel())
+            when(val result = MizikiApi.podcastApiService.getPodcasts()) {
+                is Result.Success -> {
+                    result.data?.data?.asDatabaseModel()?.let { database.podcastDao.insertAll(it) }
+                }
+                is Result.Failure -> {
+                    Timber.i(result.toString())
+                }
+                else -> Timber.i(result.toString())
+            }
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.levagency.miziki.domain.album.adapter
+package com.levagency.miziki.domain.artist.adapter
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -6,44 +6,44 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.levagency.miziki.databinding.ArtistTileItemViewBinding
 import com.levagency.miziki.databinding.TileItemViewBinding
 import com.levagency.miziki.domain.album.entity.Album
-import com.levagency.miziki.domain.album.listener.AlbumListener
+import com.levagency.miziki.domain.artist.entity.Artist
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class AlbumDiffCallback : DiffUtil.ItemCallback<Album>(){
-    override fun areItemsTheSame(oldItem: Album, newItem: Album): Boolean {
+class ArtistDiffCallback : DiffUtil.ItemCallback<Artist>(){
+    override fun areItemsTheSame(oldItem: Artist, newItem: Artist): Boolean {
         return oldItem.id == newItem.id
     }
 
     @SuppressLint("DiffUtilEquals")
-    override fun areContentsTheSame(oldItem: Album, newItem: Album): Boolean {
+    override fun areContentsTheSame(oldItem: Artist, newItem: Artist): Boolean {
         return oldItem == newItem
     }
 }
 
-class AlbumAdapter() : ListAdapter<Album, RecyclerView.ViewHolder>(
-    AlbumDiffCallback()
+class ArtistAdapter() : ListAdapter<Artist, RecyclerView.ViewHolder>(
+    ArtistDiffCallback()
 ) {
     private val adapterScope = CoroutineScope(Dispatchers.Default)
 
-    class ViewHolder private constructor(private val binding: TileItemViewBinding) : RecyclerView.ViewHolder(binding.root)
+    class ViewHolder private constructor(private val binding: ArtistTileItemViewBinding) : RecyclerView.ViewHolder(binding.root)
     {
         fun bind(
-            item: Album,
+            item: Artist,
         ) {
-            binding.album = item
-            binding.albumTitle.text = item.name
+            binding.artist = item
             binding.executePendingBindings()
         }
 
         companion object {
             fun from(parent: ViewGroup): ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val binding = TileItemViewBinding.inflate(layoutInflater, parent, false)
+                val binding = ArtistTileItemViewBinding.inflate(layoutInflater, parent, false)
 
                 return ViewHolder(binding)
             }
@@ -63,7 +63,7 @@ class AlbumAdapter() : ListAdapter<Album, RecyclerView.ViewHolder>(
         }
     }
 
-    fun addHeaderAndSubmitList(list: List<Album>) {
+    fun submit(list: List<Artist>) {
         adapterScope.launch {
             withContext(Dispatchers.Main){
                 submitList(list)

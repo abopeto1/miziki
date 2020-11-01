@@ -10,9 +10,13 @@ import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.util.Util
 import com.levagency.miziki.R
+import com.levagency.miziki.controllers.fragments.ui.HomeViewModel
+import com.levagency.miziki.controllers.fragments.ui.HomeViewModelFactory
 import com.levagency.miziki.databinding.ActivityMainBinding
 import com.levagency.miziki.domain.album.factory.AlbumViewModelFactory
 import com.levagency.miziki.domain.album.viewmodel.AlbumViewModel
+import com.levagency.miziki.domain.artist.view_model.ArtistViewModel
+import com.levagency.miziki.domain.artist.view_model.ArtistViewModelFactory
 import com.levagency.miziki.domain.genre.view_model.GenreViewModel
 import com.levagency.miziki.domain.genre.view_model.GenreViewModelFactory
 import com.levagency.miziki.domain.playlist.view_model.PlaylistViewModel
@@ -24,9 +28,11 @@ import com.levagency.miziki.domain.recent_played.view_model.RecentPlayedViewMode
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private lateinit var albumViewModel: AlbumViewModel
-    private lateinit var genreViewModel: GenreViewModel
-    private lateinit var playlistViewModel: PlaylistViewModel
+    private lateinit var homeViewModel: HomeViewModel
+    private lateinit var albumViewModel: AlbumViewModel // set Album ViewModel
+    private lateinit var artistViewModel: ArtistViewModel // set Artist ViewModel
+    private lateinit var genreViewModel: GenreViewModel // set Genre ViewModel
+    private lateinit var playlistViewModel: PlaylistViewModel // set Playlist View Model
     private lateinit var podcastViewModel: PodcastViewModel
     private lateinit var recentPlayedViewModel: RecentPlayedViewModel // Set recent played view model
 
@@ -106,9 +112,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initViewModels(){
-//        initPlaylistViewModel()
+        initHomeViewModel() // Initialize Home View Model
         initAlbumViewModel() // Initialize Album View Model
+        initArtistViewModel() // Initialize Artist View Model
+        initGenreViewModel()
+        initPlaylistViewModel() // Initialize Playlist View Model
+        initPodcastViewModel() // Podcasts
         initRecentPlayedViewModel() // Initialize Recent Played View Model
+    }
+
+    private fun initHomeViewModel(){
+        val homeViewModelFactory = HomeViewModelFactory(this.application)
+
+        homeViewModel = ViewModelProvider(this, homeViewModelFactory).get(HomeViewModel::class.java)
     }
 
     private fun initGenreViewModel() {
@@ -142,5 +158,12 @@ class MainActivity : AppCompatActivity() {
         val recentPlaylistViewModelFactory = RecentPlayedViewModelFactory(this.application)
 
         recentPlayedViewModel = ViewModelProvider(this, recentPlaylistViewModelFactory).get(RecentPlayedViewModel::class.java)
+    }
+
+    // Initialize Artist View Model
+    private fun initArtistViewModel() {
+        val artistViewModelFactory = ArtistViewModelFactory(this.application)
+
+        artistViewModel = ViewModelProvider(this, artistViewModelFactory).get(ArtistViewModel::class.java)
     }
 }

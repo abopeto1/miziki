@@ -28,9 +28,9 @@ class PersonRepository(
      *
      */
     suspend fun refreshPersons() {
-        withContext(Dispatchers.IO) {
-            val persons = MizikiApi.mizikiNetwork.getPersons()
-            database.personDao.insertAll(persons.asDatabaseModel())
-        }
+//        withContext(Dispatchers.IO) {
+//            val persons = MizikiApi.mizikiNetwork.getPersons()
+//            database.personDao.insertAll(persons.asDatabaseModel())
+//        }
     }
 }

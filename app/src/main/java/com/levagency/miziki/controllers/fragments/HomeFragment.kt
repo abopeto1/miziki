@@ -7,24 +7,28 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.levagency.miziki.R
 import com.levagency.miziki.domain.album.viewmodel.AlbumViewModel
 import com.levagency.miziki.controllers.fragments.ui.*
 import com.levagency.miziki.databinding.FragmentHomeBinding
+import com.levagency.miziki.domain.artist.view_model.ArtistViewModel
+import com.levagency.miziki.domain.genre.view_model.GenreViewModel
+import com.levagency.miziki.domain.playlist.view_model.PlaylistViewModel
+import com.levagency.miziki.domain.podcast.view_model.PodcastViewModel
 import com.levagency.miziki.domain.recent_played.view_model.RecentPlayedViewModel
 import kotlinx.android.synthetic.main.home_list_item.view.*
 import timber.log.Timber
 
 class HomeFragment : Fragment() {
-    private lateinit var homeViewModel: HomeViewModel
-    private lateinit var viewModelFactory: HomeViewModelFactory
-//    private val genreViewModel: GenreViewModel by activityViewModels()
-//    private val playlistViewModel: PlaylistViewModel by activityViewModels()
+    private val homeViewModel: HomeViewModel by activityViewModels()
+
     private val albumViewModel: AlbumViewModel by activityViewModels()
+    private val artistViewModel: ArtistViewModel by activityViewModels()
     private val recentPlayedViewModel: RecentPlayedViewModel by activityViewModels()
-//    private val podcastViewModel: PodcastViewModel by activityViewModels()
+    private val genreViewModel: GenreViewModel by activityViewModels()
+    private val playlistViewModel: PlaylistViewModel by activityViewModels()
+    private val podcastViewModel: PodcastViewModel by activityViewModels()
 
     private lateinit var binding: FragmentHomeBinding
 
@@ -38,23 +42,14 @@ class HomeFragment : Fragment() {
         // Initialize Categories
         initHomeCategories()
 
-        Timber.i("Start HomeFragment")
         binding.lifecycleOwner = this
-        // Get Application
-//        val application = requireNotNull(this.activity).application
-//        Timber.i(genreViewModel.toString())
-        // Initialize Recent Played
-//        initRecentPlayed(binding, application)
-//        initMakeMondayMoreProductive(binding, application)
+
         initObservers()
         return binding.root
     }
 
     private fun initHomeCategories() {
         val homeAdapter = HomeAdapter()
-        viewModelFactory = HomeViewModelFactory(this.lifecycle, requireNotNull(this.activity).application)
-
-        homeViewModel = ViewModelProvider(this, viewModelFactory).get(HomeViewModel::class.java)
         binding.homeViewModel = homeViewModel
 
         binding.homeList.apply {
@@ -67,24 +62,26 @@ class HomeFragment : Fragment() {
             homeAdapter.addCategories(list)
         })
 
-//        homeViewModel.browser.value = genreViewModel.genreListAdapter
-//        genreViewModel.genres.value?.let { homeViewModel.browser.value?.addGenres(it) }
+        homeViewModel.recentlyPlayed.value = recentPlayedViewModel.homeAdapter
+
+        homeViewModel.makeMondayMoreProductive.value = playlistViewModel.popularPlaylistAdapter
+
+        homeViewModel.browser.value = genreViewModel.genreListAdapter
 
         // set playlist picks adapter
-//        homeViewModel.playlistPicks.value = playlistViewModel.listAdapter
-//        playlistViewModel.playlists.value.let {
-//            if (it != null) {
-//                homeViewModel.playlistPicks.value?.addPlaylists(it)
-//            }
-//        }
+        homeViewModel.playlistPicks.value = playlistViewModel.listAdapter
 
-//        // set podcasts adapter
-//        homeViewModel.podcasts.value = podcastViewModel.listAdapter
-//        podcastViewModel.podcasts.value.let {
-//            if (it != null) {
-//                homeViewModel.podcasts.value?.addPodcasts(it)
-//            }
-//        }
+        // set podcasts adapter
+        homeViewModel.podcasts.value = podcastViewModel.listAdapter
+
+        // set New Releases
+        homeViewModel.newReleases.value = albumViewModel.homeAdapter
+
+        // set Recommends Artists
+        homeViewModel.recommendsArtists.value = artistViewModel.homeAdapter
+
+        // set popular playlists
+        homeViewModel.popularPlaylists.value = playlistViewModel.popularPlaylistAdapter
     }
 
     private fun initObservers(){
@@ -95,19 +92,37 @@ class HomeFragment : Fragment() {
         })
 
         recentPlayedViewModel.recentPlayed.observe(viewLifecycleOwner, {
+            homeViewModel.recentlyPlayed.value?.submit(it)
+        })
+
+        albumViewModel.albums.observe(viewLifecycleOwner, {
+            homeViewModel.newReleases.value?.addHeaderAndSubmitList(it)
+        })
+
+        genreViewModel.genres.observe(viewLifecycleOwner, {
+            homeViewModel.browser.value?.addGenres(it)
+        })
+
+        recentPlayedViewModel.recentPlayed.observe(viewLifecycleOwner, {
             if(it.isNotEmpty()){
-                Timber.i("it not empty")
                 binding.homeList.list_empty.visibility = View.GONE
             }
             homeViewModel.recentlyPlayed.value?.submit(it)
         })
-//        genreViewModel.genres.observe(viewLifecycleOwner, {
-//            homeViewModel.browser.value?.addGenres(it)
-//        })
 
-//        playlistViewModel.playlists.observe(viewLifecycleOwner, {
-//            homeViewModel.playlistPicks.value?.addPlaylists(it)
-//        })
+        podcastViewModel.podcasts.observe(viewLifecycleOwner,{
+            homeViewModel.podcasts.value?.addPodcasts(it)
+        })
+
+        artistViewModel.recommendsArtist.observe(viewLifecycleOwner, {
+            homeViewModel.recommendsArtists.value?.submit(it)
+        })
+
+        playlistViewModel.playlists.observe(viewLifecycleOwner, {
+            homeViewModel.playlistPicks.value?.addPlaylists(it)
+            homeViewModel.popularPlaylists.value?.addPlaylists(it)
+            homeViewModel.makeMondayMoreProductive.value?.addPlaylists(it)
+        })
     }
 //    private fun initMakeMondayMoreProductive(binding: FragmentHomeBinding, application: Application){
 //        // Create an instance of the ViewModel Factory
@@ -156,14 +171,45 @@ class HomeFragment : Fragment() {
 
         homeViewModel.recentlyPlayed.observe(viewLifecycleOwner, {
             it.let {
-                binding.homeViewModel?.categories?.value?.get(RECENT_PLAYED)?.adapter = it
+                homeViewModel.categories.value?.get(RECENT_PLAYED)?.adapter = it
+            }
+        })
+        homeViewModel.makeMondayMoreProductive.observe(viewLifecycleOwner, {
+            it.let {
+                homeViewModel.categories.value?.get(MAKE_MONDAY_MORE_PRODUCTIVE)?.adapter = it
             }
         })
 
-        homeViewModel.makeMondayMoreProductive.observe(viewLifecycleOwner, {
+        homeViewModel.browser.observe(viewLifecycleOwner, {
             it.let {
-                binding.homeViewModel?.categories?.value?.get(MAKE_MONDAY_MORE_PRODUCTIVE)?.adapter = it
+                homeViewModel.categories.value?.get(BROWSE)?.adapter = it
             }
+        })
+
+        homeViewModel.playlistPicks.observe(viewLifecycleOwner, {
+            it.let { homeViewModel.categories.value?.get(PLAYLIST_PICKS)?.adapter = it }
+        })
+
+        homeViewModel.newReleases.observe(viewLifecycleOwner, {
+            it.let {
+
+                binding.homeViewModel?.categories?.value?.get(NEW_RELEASES)?.adapter = it
+            }
+        })
+
+        homeViewModel.recommendsArtists.observe(viewLifecycleOwner, {
+            it.let { binding.homeViewModel?.categories?.value?.get(RECOMMEND_ARTISTS)?.adapter = it }
+        })
+
+        homeViewModel.popularPlaylists.observe(viewLifecycleOwner, {
+            it.let {
+                binding.homeViewModel!!.categories.value?.get(POPULAR_PLAYLISTS)?.adapter = it
+                homeViewModel.doneShowingLoadingProgressBar()
+            }
+        })
+
+        homeViewModel.podcasts.observe(viewLifecycleOwner, {
+            it.let { homeViewModel.categories.value?.get(PODCASTS)?.adapter = it }
         })
     }
 }

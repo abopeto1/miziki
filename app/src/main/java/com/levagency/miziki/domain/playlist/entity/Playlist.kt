@@ -5,8 +5,9 @@ package com.levagency.miziki.domain.playlist.entity
  */
 data class Playlist(
         val id: Long,
-        val numTracks: Int,
-        val description: String,
-        val image: String,
-        val name: String
+        val numTracks: Int?,
+        val description: String?,
+        val image: String?,
+        val name: String,
+        val fans: Long? = null
 )

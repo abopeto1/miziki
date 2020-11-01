@@ -9,9 +9,9 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "playlist")
 data class DatabasePlaylist constructor(
     @PrimaryKey val id: Long,
-    val numTracks: Int,
-    val description: String,
-    val image: String,
+    val numTracks: Int?,
+    val description: String?,
+    val image: String?,
     val name: String
 )
 

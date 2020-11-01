@@ -18,6 +18,7 @@ class PlaylistViewModel(application: Application) : AndroidViewModel(application
 
     // list adapter
     var listAdapter = PlaylistAdapter()
+    var popularPlaylistAdapter = PlaylistAdapter()
 
     init {
         initPlaylists()

@@ -6,6 +6,7 @@ import androidx.navigation.Navigation
 import com.levagency.miziki.R
 import com.levagency.miziki.domain.album.adapter.AlbumAdapter
 import com.levagency.miziki.domain.album.listener.AlbumListener
+import com.levagency.miziki.domain.artist.adapter.ArtistAdapter
 import com.levagency.miziki.domain.genre.adapter.GenreListAdapter
 import com.levagency.miziki.domain.playlist.adapter.PlaylistAdapter
 import com.levagency.miziki.domain.podcast.adapter.PodcastAdapter
@@ -20,10 +21,10 @@ const val BROWSE = 2
 const val PLAYLIST_PICKS = 3
 const val PODCASTS = 4
 const val NEW_RELEASES = 5
-const val RECOMMEND = 6
-const val POPULAR_ARTISTS = 7
+const val RECOMMEND_ARTISTS = 6
+const val POPULAR_PLAYLISTS = 7
 
-class HomeViewModel(lifecycle: Lifecycle, application: Application) : ViewModel(), LifecycleObserver {
+class HomeViewModel(application: Application) : ViewModel(), LifecycleObserver {
     val categories = MutableLiveData<MutableList<HomeCategory>>()
 
     // status for Loading
@@ -32,17 +33,24 @@ class HomeViewModel(lifecycle: Lifecycle, application: Application) : ViewModel(
         get() = _showLoadingProgressBar
 
     val recentlyPlayed = MutableLiveData<RecentPlayedAdapter>()
-    val makeMondayMoreProductive = MutableLiveData<AlbumAdapter>()
+    val makeMondayMoreProductive = MutableLiveData<PlaylistAdapter>()
 
     val browser = MutableLiveData<GenreListAdapter>()
     val playlistPicks = MutableLiveData<PlaylistAdapter>()
     val podcasts = MutableLiveData<PodcastAdapter>()
 
+    val newReleases = MutableLiveData<AlbumAdapter>()
+
+    val recommendsArtists = MutableLiveData<ArtistAdapter>()
+
+    val popularPlaylists = MutableLiveData<PlaylistAdapter>()
+
     init {
-        lifecycle.addObserver(this)
+        viewModelScope.launch {
+            initializeCategories()
+        }
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_START)
     private fun initializeCategories() {
         _showLoadingProgressBar.value = true
 
@@ -82,28 +90,24 @@ class HomeViewModel(lifecycle: Lifecycle, application: Application) : ViewModel(
         // Init New Releases For You
         categories.value?.add(NEW_RELEASES, HomeCategory(
             "New Releases for You",
-            makeMondayMoreProductive.value,
+            newReleases.value,
         ))
 
-        // Init New Releases For You
-        categories.value?.add(NEW_RELEASES, HomeCategory(
-            "New Releases for You",
-            makeMondayMoreProductive.value,
-        ))
-
-        // Init New Releases For You
-        categories.value?.add(RECOMMEND, HomeCategory(
+        // Init Recommends For You
+        categories.value?.add(
+            RECOMMEND_ARTISTS, HomeCategory(
             "You might like these Artists",
-            makeMondayMoreProductive.value,
+            recommendsArtists.value,
         ))
 
         // Init New Releases For You
-        categories.value?.add(POPULAR_ARTISTS, HomeCategory(
+        categories.value?.add(
+            POPULAR_PLAYLISTS, HomeCategory(
             "Popular Artists",
-            makeMondayMoreProductive.value,
+            popularPlaylists.value,
         ))
 
-        doneShowingLoadingProgressBar()
+//        doneShowingLoadingProgressBar()
     }
 
 //    private fun initRecentPlayed() =
@@ -120,11 +124,12 @@ class HomeViewModel(lifecycle: Lifecycle, application: Application) : ViewModel(
 //                Timber.i(e)
 //            }
 //        }
+
 //    fun onSetCategory(type: Int, adapter: RecyclerView.Adapter<RecyclerView.ViewHolder>){
 //        categories.value?.get(type)?.adapter = adapter
 //    }
 
-    private fun doneShowingLoadingProgressBar(){
+    fun doneShowingLoadingProgressBar(){
         _showLoadingProgressBar.value = false
     }
 }

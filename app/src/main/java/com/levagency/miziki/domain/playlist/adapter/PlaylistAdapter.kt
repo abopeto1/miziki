@@ -1,6 +1,7 @@
 package com.levagency.miziki.domain.playlist.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -11,6 +12,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 class PlaylistDiffUtil: DiffUtil.ItemCallback<Playlist>() {
     override fun areItemsTheSame(oldItem: Playlist, newItem: Playlist): Boolean {
@@ -30,6 +32,10 @@ class PlaylistAdapter: ListAdapter<Playlist, RecyclerView.ViewHolder>(PlaylistDi
                 item: Playlist
         ){
             binding.playlist = item
+            if(item.fans == null){
+                binding.favoriteIcon.visibility = View.GONE
+            }
+            binding.executePendingBindings()
         }
 
         companion object {

@@ -4,19 +4,6 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
- * Holds a list of genres & moods
- *
- * This is to parse first level of our network result which looks like
- * {
- *  "genres": []
- * }
- */
-//@JsonClass(generateAdapter = true)
-//data class NetworkGenreContainer(
-//    val genres: List<NetworkGenre>
-//)
-
-/**
  * Network Genre
  */
 @JsonClass(generateAdapter = true)

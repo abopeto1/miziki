@@ -6,9 +6,12 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.levagency.miziki.R
+import com.levagency.miziki.databinding.GenreMoodTileViewBinding
 import com.levagency.miziki.databinding.GenreTileViewBinding
 import com.levagency.miziki.domain.genre.entity.Genre
 import com.levagency.miziki.domain.genre.listener.GenreListener
+import kotlinx.android.synthetic.main.fragment_genre.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -61,13 +64,53 @@ class GenreListAdapter(
         }
     }
 
+    class GenreListViewHolder private constructor(private val binding: GenreMoodTileViewBinding) : RecyclerView.ViewHolder(binding.root)
+    {
+        fun bind(
+            item: Genre,
+            clickListener: GenreListener,
+            navigationId: Int
+        ){
+            binding.genre = item
+//            binding.itemContainer.setOnClickListener{
+//                clickListener.onClick(item)
+//                Navigation.findNavController(it).navigate(navigationId)
+//            }
+//            (
+//                Navigation.createNavigateOnClickListener(navigationId)
+//            )
+        }
+
+        companion object {
+            fun from(parent: ViewGroup): GenreListViewHolder{
+                val layoutInflater = LayoutInflater.from(parent.context)
+
+                val binding = GenreMoodTileViewBinding.inflate(layoutInflater, parent, false)
+
+                return GenreListViewHolder(binding)
+            }
+        }
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return ViewHolder.from(parent)
+        return when (parent.id){
+            R.id.genre_list -> {
+                GenreListViewHolder.from(parent)
+            }
+            else -> {
+                ViewHolder.from(parent)
+            }
+        }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when(holder){
             is ViewHolder -> {
+                val item = getItem(position)
+
+                holder.bind(item, clickListener, navigationId)
+            }
+            is GenreListViewHolder -> {
                 val item = getItem(position)
 
                 holder.bind(item, clickListener, navigationId)

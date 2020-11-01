@@ -14,7 +14,7 @@ import java.io.IOException
 import java.lang.IllegalArgumentException
 
 class PodcastViewModel(application: Application): AndroidViewModel(application) {
-    val repository = PodcastRepository(getDatabase(application))
+    private val repository = PodcastRepository(getDatabase(application))
 
     // Set Podcasts
     val podcasts = repository.podcasts

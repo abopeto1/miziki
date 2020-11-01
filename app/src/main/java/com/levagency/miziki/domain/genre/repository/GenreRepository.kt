@@ -7,11 +7,10 @@ import com.levagency.miziki.domain.genre.entity.Genre
 import com.levagency.miziki.domain.genre.entity.asDatabaseModel
 import com.levagency.miziki.domain.genre.entity.asDomainModel
 import com.levagency.miziki.network.MizikiApi
+import com.levagency.miziki.network.Result
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import retrofit2.HttpException
 import timber.log.Timber
-import java.io.IOException
 
 class GenreRepository(
     val database: MizikiDatabase
@@ -22,9 +21,16 @@ class GenreRepository(
 
     suspend fun refreshGenre(){
         withContext(Dispatchers.IO){
-            val networkGenres = MizikiApi.mizikiNetwork.getGenres()
-
-            database.genreDao.insertAll(networkGenres.asDatabaseModel())
+            when(val result = MizikiApi.genreApiService.getGenres()){
+                is Result.Success -> {
+                    result.data?.data?.asDatabaseModel()?.let { database.genreDao.insertAll(it) }
+                }
+                is Result.Failure -> {
+                    Timber.i(result.toString())
+                    Timber.i(result.code.toString())
+                }
+                else -> Timber.i(result.toString())
+            }
         }
     }
 

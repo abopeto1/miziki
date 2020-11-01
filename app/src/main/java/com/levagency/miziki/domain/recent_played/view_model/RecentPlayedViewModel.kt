@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.levagency.miziki.database.database.getDatabase
+import com.levagency.miziki.domain.recent_played.adapter.RecentPlayedAdapter
 import com.levagency.miziki.domain.recent_played.repository.RecentPlayedRepository
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -16,6 +17,8 @@ class RecentPlayedViewModel(application: Application): AndroidViewModel(applicat
     private fun getRecentPlayedRepository(application: Application) = RecentPlayedRepository(getDatabase(application))
 
     val recentPlayed = getRecentPlayedRepository(getApplication()).recentPlayed
+
+    val homeAdapter = RecentPlayedAdapter()
 
     init {
         viewModelScope.launch {

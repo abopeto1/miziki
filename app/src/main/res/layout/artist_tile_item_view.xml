@@ -5,44 +5,44 @@
 
     <data>
         <variable
-            name="album"
-            type="com.levagency.miziki.domain.album.entity.Album" />
-        <variable
-            name="clickListener"
-            type="com.levagency.miziki.domain.album.listener.AlbumListener" />
+            name="artist"
+            type="com.levagency.miziki.domain.artist.entity.Artist" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="@{() -> clickListener.onClick(album)}"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="8dp">
 
         <ImageView
             android:id="@+id/album_img"
-            android:layout_width="@dimen/tile_size"
-            android:layout_height="@dimen/tile_size"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
             android:layout_marginTop="8dp"
             android:contentDescription="@string/music_label"
-            android:background="@drawable/ic_rounded_corner_background"
+            android:background="@drawable/circle_tile"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:imageUrl="@{album.image}"
+            app:imageUrl="@{artist.imageUrl}"
             android:scaleType="fitCenter"
             android:adjustViewBounds="true"
-            tools:src="@drawable/ic_music" />
+            tools:src="@drawable/ic_music"
+            tools:padding="40dp"/>
 
         <TextView
             android:id="@+id/album_title"
             style="@style/title"
-            android:layout_width="96dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/small_margin_horizontal"
-            android:text="@{album.name}"
+            android:layout_marginTop="4dp"
+            android:text="@{artist.name}"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/album_img"
+            android:maxLength="15"
+            android:ellipsize="end"
             tools:text="DatabaseAlbum Title" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

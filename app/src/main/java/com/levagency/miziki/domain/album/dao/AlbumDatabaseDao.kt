@@ -1,7 +1,10 @@
-package com.levagency.miziki.database.dao
+package com.levagency.miziki.domain.album.dao
 
 import androidx.lifecycle.LiveData
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
 import com.levagency.miziki.domain.album.entity.DatabaseAlbum
 
 @Dao
