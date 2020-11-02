@@ -3,16 +3,17 @@ package com.levagency.miziki.domain.playlist.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.levagency.miziki.databinding.PlaylistTileItemViewBinding
 import com.levagency.miziki.domain.playlist.entity.Playlist
+import com.levagency.miziki.utils.EntityListener
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 
 class PlaylistDiffUtil: DiffUtil.ItemCallback<Playlist>() {
     override fun areItemsTheSame(oldItem: Playlist, newItem: Playlist): Boolean {
@@ -24,14 +25,20 @@ class PlaylistDiffUtil: DiffUtil.ItemCallback<Playlist>() {
     }
 }
 
-class PlaylistAdapter: ListAdapter<Playlist, RecyclerView.ViewHolder>(PlaylistDiffUtil()){
+class PlaylistAdapter(val navigateId: Int, val entityListener: EntityListener<Playlist>) : ListAdapter<Playlist, RecyclerView.ViewHolder>(PlaylistDiffUtil()){
     private val adapterScope = CoroutineScope(Dispatchers.Default)
 
     class ViewHolder(private val binding: PlaylistTileItemViewBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(
-                item: Playlist
+            item: Playlist,
+            navigateId: Int,
+            entityListener: EntityListener<Playlist>
         ){
             binding.playlist = item
+            binding.playlistImage.setOnClickListener {
+                entityListener.clickListener(item)
+                Navigation.findNavController(it).navigate(navigateId)
+            }
             if(item.fans == null){
                 binding.favoriteIcon.visibility = View.GONE
             }
@@ -56,7 +63,7 @@ class PlaylistAdapter: ListAdapter<Playlist, RecyclerView.ViewHolder>(PlaylistDi
             is ViewHolder -> {
                 val item = getItem(position)
 
-                return holder.bind(item)
+                return holder.bind(item, navigateId, entityListener)
             }
         }
     }

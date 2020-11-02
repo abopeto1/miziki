@@ -2,9 +2,12 @@ package com.levagency.miziki.domain.playlist.view_model
 
 import android.app.Application
 import androidx.lifecycle.*
+import com.levagency.miziki.R
 import com.levagency.miziki.database.database.getDatabase
 import com.levagency.miziki.domain.playlist.adapter.PlaylistAdapter
+import com.levagency.miziki.domain.playlist.entity.Playlist
 import com.levagency.miziki.domain.playlist.repository.PlaylistRepository
+import com.levagency.miziki.utils.EntityListener
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.IOException
@@ -16,12 +19,23 @@ class PlaylistViewModel(application: Application) : AndroidViewModel(application
     // Set Playlists
     val playlists = playlistRepository.playlists
 
+    val selectedPlaylist = MutableLiveData<Playlist>()
+
     // list adapter
-    var listAdapter = PlaylistAdapter()
-    var popularPlaylistAdapter = PlaylistAdapter()
+    var listAdapter = PlaylistAdapter(R.id.action_musicFragment_to_playlistFragment,EntityListener<Playlist> {
+            it -> getPlaylist(it)
+    })
+
+    var popularPlaylistAdapter = PlaylistAdapter(R.id.action_musicFragment_to_playlistFragment, EntityListener<Playlist> {
+        it -> getPlaylist(it)
+    })
 
     init {
         initPlaylists()
+    }
+
+    private fun getPlaylist(playlist: Playlist){
+        selectedPlaylist.value = playlist
     }
 
     private fun initPlaylists(){

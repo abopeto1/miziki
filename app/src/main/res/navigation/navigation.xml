@@ -18,6 +18,9 @@
         <action
             android:id="@+id/action_musicFragment_to_genreSelectedFragment"
             app:destination="@id/genreSelectedFragment" />
+        <action
+            android:id="@+id/action_musicFragment_to_playlistFragment"
+            app:destination="@id/playlistFragment" />
     </fragment>
     <fragment
         android:id="@+id/favoritesFragment"
@@ -38,4 +41,8 @@
         android:id="@+id/genreSelectedFragment"
         android:name="com.levagency.miziki.controllers.fragments.GenreSelectedFragment"
         android:label="GenreSelectedFragment" />
+    <fragment
+        android:id="@+id/playlistFragment"
+        android:name="com.levagency.miziki.controllers.fragments.PlaylistFragment"
+        android:label="PlaylistFragment" />
 </navigation>

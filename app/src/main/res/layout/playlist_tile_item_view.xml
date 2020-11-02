@@ -16,7 +16,7 @@
         android:layout_marginEnd="8dp">
 
         <ImageView
-            android:id="@+id/album_image"
+            android:id="@+id/playlist_image"
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_marginTop="8dp"
@@ -38,8 +38,8 @@
             android:layout_marginBottom="8dp"
             android:background="@drawable/circle_button"
             android:contentDescription="@string/play_button_label"
-            app:layout_constraintBottom_toBottomOf="@+id/album_image"
-            app:layout_constraintStart_toStartOf="@+id/album_image"
+            app:layout_constraintBottom_toBottomOf="@+id/playlist_image"
+            app:layout_constraintStart_toStartOf="@+id/playlist_image"
             app:srcCompat="@drawable/ic_play" />
 
         <TextView
@@ -52,7 +52,7 @@
             android:maxLength="15"
             android:ellipsize="end"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/album_image"
+            app:layout_constraintTop_toBottomOf="@+id/playlist_image"
             tools:text="Playlist Title" />
 
         <ImageView
@@ -61,7 +61,7 @@
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_marginTop="4dp"
-            app:layout_constraintStart_toStartOf="@+id/album_image"
+            app:layout_constraintStart_toStartOf="@+id/playlist_image"
             app:layout_constraintTop_toBottomOf="@+id/album_title"
             app:srcCompat="@drawable/ic_favorite" />
 
@@ -71,7 +71,7 @@
             android:layout_height="0dp"
             android:layout_marginStart="4dp"
             android:layout_marginTop="4dp"
-            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintStart_toEndOf="@+id/favoriteIcon"
             app:layout_constraintTop_toBottomOf="@+id/album_title"
             tools:text="150" />
     </androidx.constraintlayout.widget.ConstraintLayout>

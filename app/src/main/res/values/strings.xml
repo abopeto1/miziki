@@ -10,4 +10,10 @@
     <string name="genre_title">Genre</string>
     <string name="media_url_mp3">https://storage.googleapis.com/exoplayer-test-media-0/play.mp3</string>
     <string name="play_button_label">Play Button</string>
+    <string name="playlist">Playlist</string>
+    <string name="follow_label">Follow</string>
+    <string name="play_label">PLAY</string>
+    <string name="track_label">Track</string>
+    <string name="track_title">Track Title</string>
+    <string name="artist_name">Artist Name</string>
 </resources>

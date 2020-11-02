@@ -42,16 +42,16 @@ class GenreSelectedFragment : Fragment() {
         }
         binding.genreSelectedList.adapter = genreSelectedListAdapter
 
-        setListToAdapters()
+//        setListToAdapters()
         return binding.root
     }
 
-    private fun setListToAdapters(){
-        genreViewModel.popularInWeek.value = PlaylistAdapter()
-
-        genreViewModel.genrePlaylists.value = PlaylistAdapter()
-
-    }
+//    private fun setListToAdapters(){
+//        genreViewModel.popularInWeek.value = PlaylistAdapter(R.id.action_musicFragment_to_playlistFragment)
+//
+//        genreViewModel.genrePlaylists.value = PlaylistAdapter(R.id.action_musicFragment_to_playlistFragment)
+//
+//    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
