@@ -2,6 +2,7 @@ package com.levagency.miziki.controllers.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
@@ -10,6 +11,8 @@ import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.util.Util
 import com.levagency.miziki.R
+import com.levagency.miziki.controllers.activities.view_model.PlayerViewModel
+import com.levagency.miziki.controllers.activities.view_model.PlayerViewModelFactory
 import com.levagency.miziki.controllers.fragments.ui.HomeViewModel
 import com.levagency.miziki.controllers.fragments.ui.HomeViewModelFactory
 import com.levagency.miziki.databinding.ActivityMainBinding
@@ -35,26 +38,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var playlistViewModel: PlaylistViewModel // set Playlist View Model
     private lateinit var podcastViewModel: PodcastViewModel
     private lateinit var recentPlayedViewModel: RecentPlayedViewModel // Set recent played view model
+    private lateinit var playerViewModel: PlayerViewModel // Player View Model
 
     // Player Variables
-    private var player: SimpleExoPlayer? = null
-    private var playWhenReady = true
-    private var currentWindow = 0
-    private var playbackPosition: Long = 0
-
-    override fun onStart() {
-        super.onStart()
-        if (Util.SDK_INT < 24){
-            initializePlayer()
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if((Util.SDK_INT < 24 || player == null)){
-            initializePlayer()
-        }
-    }
+//    private var player: SimpleExoPlayer? = null
+//    private var playWhenReady = true
+//    private var currentWindow = 0
+//    private var playbackPosition: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,48 +57,54 @@ class MainActivity : AppCompatActivity() {
         configureBottomMenu()
     }
 
-    override fun onPause() {
-        super.onPause()
-        if (Util.SDK_INT < 24){
-            releasePlayer()
-        }
+//    private fun initializePlayer(){
+//        player = SimpleExoPlayer.Builder(this).build()
+//        binding.minPlayer.player = player
+//
+//        val mediaItem = MediaItem.fromUri(getString(R.string.media_url_mp3))
+//        player!!.setMediaItem(mediaItem)
+//
+//        val secondMediaItem = MediaItem.fromUri(getString(R.string.media_url_mp3))
+//        player!!.addMediaItem(secondMediaItem)
+//
+//        player!!.playWhenReady = playWhenReady
+//        player!!.seekTo(currentWindow, playbackPosition)
+//        player!!.prepare()
+//        player!!.pause()
+//    }
+
+//    private fun releasePlayer() {
+//        if (player != null) {
+//            playWhenReady = player!!.playWhenReady
+//            playbackPosition = player!!.currentPosition
+//            currentWindow = player!!.currentWindowIndex
+//            player!!.release()
+//            player = null
+//        }
+//    }
+
+    private fun showBottomView() {
+        binding.bottomNavigation.visibility = View.VISIBLE
     }
 
-    override fun onStop() {
-        super.onStop()
-        if (Util.SDK_INT < 24){
-            releasePlayer()
-        }
-    }
-
-    private fun initializePlayer(){
-        player = SimpleExoPlayer.Builder(this).build()
-        binding.minPlayer.player = player
-
-        val mediaItem = MediaItem.fromUri(getString(R.string.media_url_mp3))
-        player!!.setMediaItem(mediaItem)
-
-        val secondMediaItem = MediaItem.fromUri(getString(R.string.media_url_mp3))
-        player!!.addMediaItem(secondMediaItem)
-
-        player!!.playWhenReady = playWhenReady
-        player!!.seekTo(currentWindow, playbackPosition)
-        player!!.prepare()
-        player!!.pause()
-    }
-
-    private fun releasePlayer() {
-        if (player != null) {
-            playWhenReady = player!!.playWhenReady
-            playbackPosition = player!!.currentPosition
-            currentWindow = player!!.currentWindowIndex
-            player!!.release()
-            player = null
-        }
+    private fun hideBottomView() {
+        binding.bottomNavigation.visibility = View.GONE
     }
 
     private fun configureBottomMenu() {
         NavigationUI.setupWithNavController(binding.bottomNavigation, findNavController(R.id.nav_host_fragment))
+        val navController = findNavController(R.id.nav_host_fragment)
+
+        navController.addOnDestinationChangedListener{ _, destination, _ ->
+            when(destination.id){
+                R.id.musicFragment -> showBottomView()
+                R.id.favoritesFragment -> showBottomView()
+                R.id.playerFragment -> {
+                    hideBottomView()
+                }
+                else -> hideBottomView()
+            }
+        }
     }
 
     private fun initViewModels(){
@@ -119,6 +115,13 @@ class MainActivity : AppCompatActivity() {
         initPlaylistViewModel() // Initialize Playlist View Model
         initPodcastViewModel() // Podcasts
         initRecentPlayedViewModel() // Initialize Recent Played View Model
+        initPlayerViewModel()
+    }
+
+    private fun initPlayerViewModel(){
+        val playerViewModelFactory = PlayerViewModelFactory(this.application)
+
+        playerViewModel = ViewModelProvider(this, playerViewModelFactory).get(PlayerViewModel::class.java)
     }
 
     private fun initHomeViewModel(){

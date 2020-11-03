@@ -7,6 +7,7 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.levagency.miziki.R
 import com.levagency.miziki.databinding.PlaylistTileItemViewBinding
 import com.levagency.miziki.domain.playlist.entity.Playlist
 import com.levagency.miziki.utils.EntityListener
@@ -38,6 +39,9 @@ class PlaylistAdapter(val navigateId: Int, val entityListener: EntityListener<Pl
             binding.playlistImage.setOnClickListener {
                 entityListener.clickListener(item)
                 Navigation.findNavController(it).navigate(navigateId)
+            }
+            binding.playButton.setOnClickListener {
+                Navigation.findNavController(it).navigate(R.id.action_musicFragment_to_playerFragment)
             }
             if(item.fans == null){
                 binding.favoriteIcon.visibility = View.GONE

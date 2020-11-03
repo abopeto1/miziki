@@ -7,4 +7,6 @@
     <color name="subtitle">#A5A5A5</color>
     <color name="background">#161A1A</color>
     <color name="menuBackground">#303033</color>
+    <color name="unPlayedColor">#AAD5D5D5</color>
+    <color name="bufferedColor">#D5D5D5</color>
 </resources>
